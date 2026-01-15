@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from textblob import TextBlob
+
+from services.nlp import metni_analiz_et
+from services.finance import fiyat_getir
 
 app = FastAPI()
 
@@ -13,13 +15,10 @@ def read_root():
 
 @app.post("/analiz")
 def analiz_yap(veri: VeriModeli):
-    analiz = TextBlob(veri.metin)
-    skor = analiz.sentiment.polarity
-    
-    karar = "Notr"
-    if skor > 0.05:
-        karar = "Olumlu"
-    elif skor < -0.05:
-        karar = "Olumsuz"
+    sonuc = metni_analiz_et(veri.metin)
+    return sonuc
 
-    return {"skor": skor, "karar": karar}
+@app.get("/fiyat/{sembol}")
+def fiyat_sorgula(sembol: str):
+    sonuc = fiyat_getir(sembol)
+    return sonuc
