@@ -1,0 +1,17 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.vs/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+
+# IDE
+.idea/
+*.swp
