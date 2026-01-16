@@ -7,12 +7,13 @@ namespace main_api.Services;
 public class AiService
 {
     private readonly HttpClient _httpClient;
+
     public AiService(HttpClient httpClient)
     {
         _httpClient = httpClient;
+        // Python servisinin adresi
         _httpClient.BaseAddress = new Uri("http://127.0.0.1:8000/");
     }
-
     public async Task<string> AnalizEt(string metin)
     {
         var gidecekVeri = new { metin = metin };
@@ -28,12 +29,31 @@ public class AiService
 
             if (cevap.IsSuccessStatusCode)
             {
-                // Python'dan gelen cevabı oku ve geri döndür
                 return await cevap.Content.ReadAsStringAsync();
             }
             else
             {
-                return "{ \"hata\": \"Python servisine ulaşılamadı veya hata döndü.\" }";
+                return "{ \"hata\": \"Python servisine ulaşılamadı.\" }";
+            }
+        }
+        catch (Exception ex)
+        {
+            return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}";
+        }
+    }
+    public async Task<string> FiyatGetir(string sembol)
+    {
+        try
+        {
+            var cevap = await _httpClient.GetAsync($"fiyat/{sembol}");
+
+            if (cevap.IsSuccessStatusCode)
+            {
+                return await cevap.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                return "{ \"hata\": \"Fiyat verisi alınamadı.\" }";
             }
         }
         catch (Exception ex)
