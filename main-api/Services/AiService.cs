@@ -14,6 +14,8 @@ public class AiService
         // Python servisinin adresi
         _httpClient.BaseAddress = new Uri("http://127.0.0.1:8000/");
     }
+
+    // 1. Analiz Fonksiyonu
     public async Task<string> AnalizEt(string metin)
     {
         var gidecekVeri = new { metin = metin };
@@ -26,39 +28,33 @@ public class AiService
         try
         {
             var cevap = await _httpClient.PostAsync("analiz", jsonPaket);
-
-            if (cevap.IsSuccessStatusCode)
-            {
-                return await cevap.Content.ReadAsStringAsync();
-            }
-            else
-            {
-                return "{ \"hata\": \"Python servisine ulaşılamadı.\" }";
-            }
+            if (cevap.IsSuccessStatusCode) return await cevap.Content.ReadAsStringAsync();
+            else return "{ \"hata\": \"Python servisine ulaşılamadı.\" }";
         }
-        catch (Exception ex)
-        {
-            return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}";
-        }
+        catch (Exception ex) { return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}"; }
     }
+
+    // 2. Fiyat Getirme Fonksiyonu
     public async Task<string> FiyatGetir(string sembol)
     {
         try
         {
             var cevap = await _httpClient.GetAsync($"fiyat/{sembol}");
+            if (cevap.IsSuccessStatusCode) return await cevap.Content.ReadAsStringAsync();
+            else return "{ \"hata\": \"Fiyat verisi alınamadı.\" }";
+        }
+        catch (Exception ex) { return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}"; }
+    }
 
-            if (cevap.IsSuccessStatusCode)
-            {
-                return await cevap.Content.ReadAsStringAsync();
-            }
-            else
-            {
-                return "{ \"hata\": \"Fiyat verisi alınamadı.\" }";
-            }
-        }
-        catch (Exception ex)
+    // 3. Haber/Piyasa Analizi Getirme Fonksiyonu (YENİ)
+    public async Task<string> PiyasaDurumuGetir()
+    {
+        try
         {
-            return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}";
+            var cevap = await _httpClient.GetAsync("piyasa-durumu");
+            if (cevap.IsSuccessStatusCode) return await cevap.Content.ReadAsStringAsync();
+            else return "{ \"hata\": \"Haber verisi alınamadı.\" }";
         }
+        catch (Exception ex) { return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}"; }
     }
 }
