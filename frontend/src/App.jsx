@@ -1,59 +1,103 @@
 import { useState } from 'react'
+import './App.css'
 
 function App() {
-  // Verileri tutacağımız kutular
-  const [fiyat, setFiyat] = useState("Yükleniyor...")
-  const [analiz, setAnaliz] = useState(null)
+  const [veri, setVeri] = useState(null)
+  const [yukleniyor, setYukleniyor] = useState(false)
 
-  // C#'tan veriyi çeken fonksiyon
-  const veriCek = async () => {
+  const analizBaslat = async () => {
+    setYukleniyor(true)
     try {
-      setFiyat("Güncelleniyor...")
-      
-      // Backend'e istek atıyoruz (5199 portuna)
       const cevap = await fetch("http://localhost:5199/api/Finans/btc")
-      const veri = await cevap.json()
-
-      // Gelen veriyi kutulara koyuyoruz
-      setFiyat(veri.fiyat)
-      setAnaliz(veri.teknik_analiz)
+      const sonuc = await cevap.json()
       
+      console.log("Gelen Veri:", sonuc)
+      setVeri(sonuc)
     } catch (hata) {
-      console.log("Hata oluştu:", hata)
-      setFiyat("Hata! Backend çalışıyor mu?")
+      console.log("Hata:", hata)
+    } finally {
+      setYukleniyor(false)
     }
   }
 
   return (
-    <div style={{ padding: "50px", fontFamily: "sans-serif" }}>
-      <h1>Borsa Paneli Test</h1>
+    <div className="container">
       
-      <div style={{ border: "1px solid #ddd", padding: "20px", borderRadius: "10px", maxWidth: "400px" }}>
-        <h2>Bitcoin (BTC)</h2>
-        <h3 style={{ color: "green" }}>${fiyat}</h3>
-
-        {analiz && (
-          <div style={{ background: "#f9f9f9", padding: "10px", marginTop: "10px" }}>
-            <p><strong>RSI:</strong> {analiz.rsi}</p>
-            <p><strong>MACD:</strong> {analiz.macd_durum}</p>
-            <p><strong>Sinyal:</strong> {analiz.sinyal}</p>
-          </div>
-        )}
-
+      <h1 className="title">🤖 NLPTrader</h1>
+      
+      <div className="button-container">
         <button 
-          onClick={veriCek}
-          style={{ 
-            marginTop: "15px", 
-            padding: "10px 20px", 
-            background: "black", 
-            color: "white", 
-            border: "none", 
-            cursor: "pointer" 
-          }}
+          onClick={analizBaslat}
+          disabled={yukleniyor}
+          className={`analiz-btn ${yukleniyor ? 'loading' : ''}`}
         >
-          Veriyi Getir
+          {yukleniyor ? "Yapay Zeka Analiz Ediyor..." : "STRATEJİYİ ÇALIŞTIR 🚀"}
         </button>
       </div>
+
+      {veri && veri.strateji ? (
+        <div className="dashboard">
+          
+          {/* 1. NİHAİ KARAR KARTI */}
+          <div className="decision-card" style={{ borderColor: veri.strateji.karar_renk, boxShadow: `0 0 20px ${veri.strateji.karar_renk}40` }}>
+            <h2>NİHAİ KARAR ({veri.sembol})</h2>
+            <div className="decision-text" style={{ color: veri.strateji.karar_renk }}>
+              {veri.strateji.karar}
+            </div>
+            <div className="score-info">
+              Skor: <strong>{veri.strateji.toplam_skor}</strong> | Fiyat: <strong>${veri.fiyat}</strong>
+            </div>
+          </div>
+
+          {/* 2. BİLEŞENLER (MACD - RSI - HABER) */}
+          <div className="components-grid">
+            
+            {/* MACD KARTI */}
+            <div className="component-card macd">
+              <h3>📈 MACD (%50)</h3>
+              <div className="component-score">
+                {veri.strateji.bilesenler.macd_puan}
+              </div>
+              <p>Histogram Gücü: {veri.strateji.ham_veriler.macd_hist}</p>
+            </div>
+
+            {/* RSI KARTI */}
+            <div className="component-card rsi">
+              <h3>⚡ RSI (%30)</h3>
+              <div className="component-score">
+                {veri.strateji.bilesenler.rsi_puan}
+              </div>
+              <p>RSI Değeri: {veri.strateji.ham_veriler.rsi_degeri}</p>
+            </div>
+
+            {/* SENTIMENT KARTI */}
+            <div className="component-card sentiment">
+              <h3>📰 Haber (%20)</h3>
+              <div className="component-score">
+                {veri.strateji.bilesenler.sentiment_puan}
+              </div>
+              <p>Kaynak: {veri.strateji.ham_veriler.haber_kaynak}</p>
+            </div>
+
+          </div>
+
+          {/* 3. HABER LİSTESİ */}
+          <div className="news-section">
+            <h4>Analiz Edilen Son Haberler</h4>
+            {veri.haberler && veri.haberler.map((haber, index) => (
+              <div key={index} className="news-item">
+                <span className="news-title">{haber.baslik.substring(0, 100)}...</span>
+                <span className={`news-tag ${haber.skor > 0 ? 'pos' : 'neg'}`}>
+                  {haber.skor > 0 ? "Olumlu" : "Olumsuz"}
+                </span>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      ) : (
+        !yukleniyor && <p className="placeholder-text">Analiz başlatmak için butona basın.</p>
+      )}
     </div>
   )
 }
