@@ -1,9 +1,21 @@
+using main_api.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactIzni", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllers();
-builder.Services.AddHttpClient<main_api.Services.AiService>(); 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient<AiService>();
 
 var app = builder.Build();
 
@@ -14,7 +26,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("ReactIzni");
 app.UseAuthorization();
-app.MapControllers(); 
+app.MapControllers();
 
 app.Run();
