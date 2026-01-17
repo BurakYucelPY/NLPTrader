@@ -1,1 +1,212 @@
+/* Sayfa Genel Ayarları */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #1e1e2f; /* Koyu arka plan */
+  color: #e0e0e0; /* Açık renk yazı */
+  min-height: 100vh;
+}
 
+/* Ana Taşıyıcı */
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* Başlık */
+.title {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2.5rem;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Buton Alanı */
+.button-container {
+  margin-bottom: 40px;
+  z-index: 10;
+}
+
+/* Analiz Butonu */
+.analiz-btn {
+  padding: 15px 50px;
+  font-size: 20px;
+  fontWeight: bold;
+  background: linear-gradient(45deg, #007bff, #00bcd4);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+  transition: all 0.3s ease;
+}
+
+.analiz-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 188, 212, 0.6);
+}
+
+.analiz-btn:disabled {
+  background: #555;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+/* --- DASHBOARD ALANI --- */
+.dashboard {
+  width: 100%;
+  max-width: 900px;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 1. Nihai Karar Kartı (En Üstteki Büyük Kart) */
+.decision-card {
+  background: #2d2d44;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  /* Kenar rengi JSX içinden dinamik geliyor */
+  border-width: 3px;
+  border-style: solid;
+  margin-bottom: 30px;
+}
+
+.decision-card h2 {
+  margin: 0;
+  color: #aaa;
+  font-size: 1.2rem;
+}
+
+.decision-text {
+  font-size: 4rem;
+  font-weight: 900;
+  margin: 15px 0;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.score-info {
+  font-size: 1.2rem;
+  color: #ccc;
+}
+
+/* 2. Bileşenler Izgarası (3'lü yan yana kartlar) */
+.components-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+/* Küçük Kartlar Genel Stil */
+.component-card {
+  flex: 1;
+  min-width: 220px;
+  background: #252538;
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.component-card:hover {
+  transform: translateY(-5px);
+}
+
+.component-card h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  color: #ddd;
+}
+
+.component-score {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 15px 0;
+}
+
+.component-card p {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0;
+}
+
+/* Kartlara Özel Renkler */
+.component-card.macd { border-top: 4px solid #ff9800; }
+.component-card.macd .component-score { color: #ff9800; }
+
+.component-card.rsi { border-top: 4px solid #2196f3; }
+.component-card.rsi .component-score { color: #2196f3; }
+
+.component-card.sentiment { border-top: 4px solid #e91e63; }
+.component-card.sentiment .component-score { color: #e91e63; }
+
+/* 3. Haber Alanı */
+.news-section {
+  background: #252538;
+  padding: 25px;
+  border-radius: 15px;
+}
+
+.news-section h4 {
+  color: #aaa;
+  border-bottom: 1px solid #444;
+  padding-bottom: 15px;
+  margin-top: 0;
+}
+
+.news-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #333;
+}
+
+.news-item:last-child {
+  border-bottom: none;
+}
+
+.news-title {
+  color: #ddd;
+  font-size: 0.95rem;
+  flex: 1;
+  padding-right: 15px;
+}
+
+.news-tag {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.news-tag.pos {
+  background-color: rgba(0, 200, 83, 0.2);
+  color: #00c853;
+}
+
+.news-tag.neg {
+  background-color: rgba(213, 0, 0, 0.2);
+  color: #ff5252;
+}
+
+/* Boş Durum Yazısı */
+.placeholder-text {
+  color: #666;
+  margin-top: 50px;
+  font-size: 1.2rem;
+}
