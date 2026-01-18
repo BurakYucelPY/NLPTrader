@@ -210,3 +210,22 @@ body, html {
   margin-top: 50px;
   font-size: 1.2rem;
 }
+
+/* Geri Butonu */
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.back-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
