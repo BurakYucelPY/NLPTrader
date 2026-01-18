@@ -229,3 +229,81 @@ body, html {
 .back-btn:hover {
   background: rgba(255,255,255,0.2);
 }
+
+/* Asset Kartları Grid */
+.assets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+}
+
+/* Asset Kartı */
+.asset-card {
+  background: linear-gradient(135deg, #2d2d44 0%, #1e1e2f 100%);
+  padding: 40px 30px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.asset-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.asset-card:hover::before {
+  opacity: 1;
+}
+
+.asset-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(0, 188, 212, 0.3);
+  border-color: currentColor;
+}
+
+.asset-icon {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+}
+
+.asset-symbol {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fff;
+  margin: 10px 0 5px 0;
+}
+
+.asset-name {
+  font-size: 1rem;
+  color: #aaa;
+  margin: 0;
+}
+
+.asset-arrow {
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+  font-size: 1.5rem;
+  color: #00bcd4;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.asset-card:hover .asset-arrow {
+  opacity: 1;
+  right: 15px;
+}
