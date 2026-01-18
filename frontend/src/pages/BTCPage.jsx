@@ -5,13 +5,11 @@ function BTCPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
-  const btcAnaliziniBaslat = async () => {
+  const analizBaslat = async () => {
     setYukleniyor(true)
     try {
       const cevap = await fetch("http://localhost:5199/api/Finans/btc")
       const sonuc = await cevap.json()
-      
-      console.log("BTC Verisi alındı:", sonuc)
       setVeri(sonuc)
     } catch (hata) {
       console.error("BTC Analiz hatası:", hata)
@@ -22,10 +20,10 @@ function BTCPage() {
 
   return (
     <AnalysisTemplate
-      baslik="🤖 NLPTrader (BTC)"
+      baslik="₿ Bitcoin (BTC)"
       yukleniyor={yukleniyor}
       veri={veri}
-      analizBaslatFn={btcAnaliziniBaslat}
+      analizBaslatFn={analizBaslat}
     />
   )
 }
