@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function BTCPage() {
+function AVAXPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/btc")
+      const cevap = await fetch("http://localhost:5199/api/Finans/avax")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("BTC Analiz hatası:", hata)
+      console.error("AVAX Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function BTCPage() {
 
   return (
     <AnalysisTemplate
-      baslik="₿ Bitcoin (BTC)"
+      baslik="🔺 Avalanche (AVAX)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function BTCPage() {
   )
 }
 
-export default BTCPage
+export default AVAXPage

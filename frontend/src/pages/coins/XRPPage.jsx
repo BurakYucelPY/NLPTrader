@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function LINKPage() {
+function XRPPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/link")
+      const cevap = await fetch("http://localhost:5199/api/Finans/xrp")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("LINK Analiz hatası:", hata)
+      console.error("XRP Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function LINKPage() {
 
   return (
     <AnalysisTemplate
-      baslik="⬡ Chainlink (LINK)"
+      baslik="✕ Ripple (XRP)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function LINKPage() {
   )
 }
 
-export default LINKPage
+export default XRPPage

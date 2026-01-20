@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function AVAXPage() {
+function LINKPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/avax")
+      const cevap = await fetch("http://localhost:5199/api/Finans/link")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("AVAX Analiz hatası:", hata)
+      console.error("LINK Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function AVAXPage() {
 
   return (
     <AnalysisTemplate
-      baslik="🔺 Avalanche (AVAX)"
+      baslik="⬡ Chainlink (LINK)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function AVAXPage() {
   )
 }
 
-export default AVAXPage
+export default LINKPage

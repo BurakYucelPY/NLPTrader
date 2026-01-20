@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function LTCPage() {
+function ETHPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/ltc")
+      const cevap = await fetch("http://localhost:5199/api/Finans/eth")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("LTC Analiz hatası:", hata)
+      console.error("ETH Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function LTCPage() {
 
   return (
     <AnalysisTemplate
-      baslik="Ł Litecoin (LTC)"
+      baslik="Ξ Ethereum (ETH)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function LTCPage() {
   )
 }
 
-export default LTCPage
+export default ETHPage

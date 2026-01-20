@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function ETHPage() {
+function NEARPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/eth")
+      const cevap = await fetch("http://localhost:5199/api/Finans/near")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("ETH Analiz hatası:", hata)
+      console.error("NEAR Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function ETHPage() {
 
   return (
     <AnalysisTemplate
-      baslik="Ξ Ethereum (ETH)"
+      baslik="Ⓝ Near Protocol (NEAR)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function ETHPage() {
   )
 }
 
-export default ETHPage
+export default NEARPage

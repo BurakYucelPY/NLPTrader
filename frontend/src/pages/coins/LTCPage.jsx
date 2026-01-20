@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function SOLPage() {
+function LTCPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/sol")
+      const cevap = await fetch("http://localhost:5199/api/Finans/ltc")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("SOL Analiz hatası:", hata)
+      console.error("LTC Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function SOLPage() {
 
   return (
     <AnalysisTemplate
-      baslik="◎ Solana (SOL)"
+      baslik="Ł Litecoin (LTC)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function SOLPage() {
   )
 }
 
-export default SOLPage
+export default LTCPage

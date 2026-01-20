@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function DOTPage() {
+function FETPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/dot")
+      const cevap = await fetch("http://localhost:5199/api/Finans/fet")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("DOT Analiz hatası:", hata)
+      console.error("FET Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function DOTPage() {
 
   return (
     <AnalysisTemplate
-      baslik="● Polkadot (DOT)"
+      baslik="🤖 Fetch.ai (FET)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function DOTPage() {
   )
 }
 
-export default DOTPage
+export default FETPage

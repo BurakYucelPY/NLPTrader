@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function TRXPage() {
+function DOGEPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/trx")
+      const cevap = await fetch("http://localhost:5199/api/Finans/doge")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("TRX Analiz hatası:", hata)
+      console.error("DOGE Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function TRXPage() {
 
   return (
     <AnalysisTemplate
-      baslik="⚡ Tron (TRX)"
+      baslik="🐕 Dogecoin (DOGE)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function TRXPage() {
   )
 }
 
-export default TRXPage
+export default DOGEPage

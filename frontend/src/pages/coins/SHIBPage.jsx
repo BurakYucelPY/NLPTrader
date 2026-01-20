@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function ADAPage() {
+function SHIBPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/ada")
+      const cevap = await fetch("http://localhost:5199/api/Finans/shib")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("ADA Analiz hatası:", hata)
+      console.error("SHIB Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function ADAPage() {
 
   return (
     <AnalysisTemplate
-      baslik="🔵 Cardano (ADA)"
+      baslik="🐶 Shiba Inu (SHIB)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function ADAPage() {
   )
 }
 
-export default ADAPage
+export default SHIBPage

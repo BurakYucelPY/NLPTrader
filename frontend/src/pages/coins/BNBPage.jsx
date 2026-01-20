@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function FETPage() {
+function BNBPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/fet")
+      const cevap = await fetch("http://localhost:5199/api/Finans/bnb")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("FET Analiz hatası:", hata)
+      console.error("BNB Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function FETPage() {
 
   return (
     <AnalysisTemplate
-      baslik="🤖 Fetch.ai (FET)"
+      baslik="🔶 Binance Coin (BNB)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function FETPage() {
   )
 }
 
-export default FETPage
+export default BNBPage

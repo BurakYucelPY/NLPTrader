@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function NEARPage() {
+function SOLPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/near")
+      const cevap = await fetch("http://localhost:5199/api/Finans/sol")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("NEAR Analiz hatası:", hata)
+      console.error("SOL Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function NEARPage() {
 
   return (
     <AnalysisTemplate
-      baslik="Ⓝ Near Protocol (NEAR)"
+      baslik="◎ Solana (SOL)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function NEARPage() {
   )
 }
 
-export default NEARPage
+export default SOLPage

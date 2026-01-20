@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import AnalysisTemplate from '../components/AnalysisTemplate'
+import AnalysisTemplate from '../../components/AnalysisTemplate'
 
-function SHIBPage() {
+function BTCPage() {
   const [veri, setVeri] = useState(null)
   const [yukleniyor, setYukleniyor] = useState(false)
 
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/shib")
+      const cevap = await fetch("http://localhost:5199/api/Finans/btc")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
-      console.error("SHIB Analiz hatası:", hata)
+      console.error("BTC Analiz hatası:", hata)
     } finally {
       setYukleniyor(false)
     }
@@ -20,7 +20,7 @@ function SHIBPage() {
 
   return (
     <AnalysisTemplate
-      baslik="🐶 Shiba Inu (SHIB)"
+      baslik="₿ Bitcoin (BTC)"
       yukleniyor={yukleniyor}
       veri={veri}
       analizBaslatFn={analizBaslat}
@@ -28,4 +28,4 @@ function SHIBPage() {
   )
 }
 
-export default SHIBPage
+export default BTCPage
