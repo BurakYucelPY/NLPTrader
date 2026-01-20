@@ -3,32 +3,210 @@ body, html {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #1a1a2e; /* Arka planı hafifçe değiştirdim */
+  background-color: #1a1a2e;
   color: #e0e0e0; 
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden; /* Ana sayfa scroll olmasın */
 }
 
-/* Ana Taşıyıcı - Home özel */
-.container-fluid {
-  min-height: 100vh;
+/* ========== HOME PAGE LAYOUT ========== */
+.home-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sol Panel: Coinler */
+.coins-panel {
+  flex: 1;
   padding: 40px;
-  max-width: 1600px;
-  margin: 0 auto;
+  overflow-y: auto;
+  background: #1a1a2e;
 }
 
-/* Ana Taşıyıcı - Genel */
+/* Sağ Panel: Haberler */
+.news-panel {
+  width: 420px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #1e1e2d 0%, #1a1a28 100%);
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+
+.news-header {
+  padding: 25px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.news-header h3 {
+  font-size: 1.3rem;
+  color: #fff;
+  margin: 0 0 15px 0;
+}
+
+.sentiment-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid;
+  margin-bottom: 12px;
+}
+
+.sentiment-emoji {
+  font-size: 1.5rem;
+}
+
+.sentiment-text {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.sentiment-score {
+  margin-left: auto;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.news-subtitle {
+  color: #666;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Scrollable Haber Listesi */
+.news-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px 20px;
+}
+
+/* Custom Scrollbar */
+.news-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.news-scroll-container::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+}
+
+.news-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+}
+
+.news-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.news-loading {
+  text-align: center;
+  padding: 60px 0;
+  color: #666;
+}
+
+.news-loading .loading-spinner {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Haber Listesi */
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.news-item {
+  background: rgba(255,255,255,0.03);
+  padding: 14px 15px 14px 0;
+  border-radius: 8px;
+  animation: slideIn 0.3s ease forwards;
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.news-item:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+.news-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 12px;
+}
+
+.news-title {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #ddd;
+  line-height: 1.4;
+}
+
+.news-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.news-score {
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.news-tag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.news-tag.pos {
+  background-color: rgba(0, 200, 83, 0.2);
+  color: #00c853;
+}
+
+.news-tag.neg {
+  background-color: rgba(213, 0, 0, 0.2);
+  color: #ff5252;
+}
+
+.news-tag.neutral {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+/* ========== GENEL CONTAINER (Coin Sayfaları için) ========== */
 .container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 40px 20px;
+  overflow-y: auto;
 }
 
 /* Asset Kartları Grid */
 .assets-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Daha küçük kartlar için min 160px */
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 15px;
   width: 100%;
 }
@@ -36,8 +214,8 @@ body, html {
 /* Asset Kartı - Küçültülmüş */
 .asset-card {
   background: #252538;
-  padding: 20px 15px; /* Padding küçültüldü */
-  border-radius: 12px; /* Radius küçültüldü */
+  padding: 20px 15px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.05);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -48,7 +226,7 @@ body, html {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 140px; /* Sabit yükseklik */
+  height: 140px;
 }
 
 .asset-card:hover {
@@ -59,39 +237,21 @@ body, html {
 }
 
 .asset-icon {
-  font-size: 2.2rem; /* İkon küçültüldü */
+  font-size: 2.2rem;
   margin-bottom: 10px;
 }
 
 .asset-symbol {
-  font-size: 1.2rem; /* Font küçültüldü */
+  font-size: 1.2rem;
   font-weight: bold;
   color: #fff;
   margin: 0;
 }
 
 .asset-name {
-  font-size: 0.85rem; /* Font küçültüldü */
+  font-size: 0.85rem;
   color: #aaa;
   margin-top: 5px;
-}
-
-/* Haber Bölümü Kartı */
-.news-panel {
-  background: #20202e;
-  border-left: 1px solid rgba(255,255,255,0.1);
-  padding: 30px;
-  height: fit-content;
-  min-height: 500px;
-}
-
-.news-panel h3 {
-  font-size: 1.4rem;
-  color: #fff;
-  margin-top: 0;
-  border-bottom: 2px solid #3d3d5c;
-  padding-bottom: 20px;
-  margin-bottom: 25px;
 }
 
 /* Başlık */
@@ -281,33 +441,6 @@ body, html {
   color: #ff5252;
 }
 
-/* Haber Listesi Stilleri */
-.news-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.news-item {
-  background: rgba(255,255,255,0.03);
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.05);
-  transition: background 0.2s;
-}
-
-.news-item:hover {
-  background: rgba(255,255,255,0.07);
-}
-
-.news-title {
-  display: block;
-  margin: 0 0 10px 0;
-  font-size: 0.95rem;
-  color: #ddd;
-  line-height: 1.4;
-}
-
 /* Boş Durum Yazısı */
 .placeholder-text {
   color: #666;
@@ -334,8 +467,7 @@ body, html {
   background: rgba(255,255,255,0.2);
 }
 
-/* Eski Asset Card stillerini tamamen kaldırıyorum, yukarıda yenilerini tanımladım */ 
-/* Asset arrow özelliğini kaldırıyorum çünkü küçük kartlarda kalabalık yapar */
+/* Asset arrow */
 .asset-arrow {
   display: none;
 }
