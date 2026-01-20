@@ -3,18 +3,95 @@ body, html {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #1e1e2f; /* Koyu arka plan */
-  color: #e0e0e0; /* Açık renk yazı */
+  background-color: #1a1a2e; /* Arka planı hafifçe değiştirdim */
+  color: #e0e0e0; 
   min-height: 100vh;
 }
 
-/* Ana Taşıyıcı */
+/* Ana Taşıyıcı - Home özel */
+.container-fluid {
+  min-height: 100vh;
+  padding: 40px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Ana Taşıyıcı - Genel */
 .container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 40px 20px;
+}
+
+/* Asset Kartları Grid */
+.assets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Daha küçük kartlar için min 160px */
+  gap: 15px;
+  width: 100%;
+}
+
+/* Asset Kartı - Küçültülmüş */
+.asset-card {
+  background: #252538;
+  padding: 20px 15px; /* Padding küçültüldü */
+  border-radius: 12px; /* Radius küçültüldü */
+  border: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 140px; /* Sabit yükseklik */
+}
+
+.asset-card:hover {
+  transform: translateY(-5px);
+  background: #2d2d44;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  border-color: currentColor;
+}
+
+.asset-icon {
+  font-size: 2.2rem; /* İkon küçültüldü */
+  margin-bottom: 10px;
+}
+
+.asset-symbol {
+  font-size: 1.2rem; /* Font küçültüldü */
+  font-weight: bold;
+  color: #fff;
+  margin: 0;
+}
+
+.asset-name {
+  font-size: 0.85rem; /* Font küçültüldü */
+  color: #aaa;
+  margin-top: 5px;
+}
+
+/* Haber Bölümü Kartı */
+.news-panel {
+  background: #20202e;
+  border-left: 1px solid rgba(255,255,255,0.1);
+  padding: 30px;
+  height: fit-content;
+  min-height: 500px;
+}
+
+.news-panel h3 {
+  font-size: 1.4rem;
+  color: #fff;
+  margin-top: 0;
+  border-bottom: 2px solid #3d3d5c;
+  padding-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 /* Başlık */
@@ -204,6 +281,33 @@ body, html {
   color: #ff5252;
 }
 
+/* Haber Listesi Stilleri */
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.news-item {
+  background: rgba(255,255,255,0.03);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.2s;
+}
+
+.news-item:hover {
+  background: rgba(255,255,255,0.07);
+}
+
+.news-title {
+  display: block;
+  margin: 0 0 10px 0;
+  font-size: 0.95rem;
+  color: #ddd;
+  line-height: 1.4;
+}
+
 /* Boş Durum Yazısı */
 .placeholder-text {
   color: #666;
@@ -230,80 +334,8 @@ body, html {
   background: rgba(255,255,255,0.2);
 }
 
-/* Asset Kartları Grid */
-.assets-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px;
-  width: 100%;
-  max-width: 900px;
-  padding: 20px;
-}
-
-/* Asset Kartı */
-.asset-card {
-  background: linear-gradient(135deg, #2d2d44 0%, #1e1e2f 100%);
-  padding: 40px 30px;
-  border-radius: 20px;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.asset-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.asset-card:hover::before {
-  opacity: 1;
-}
-
-.asset-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 30px rgba(0, 188, 212, 0.3);
-  border-color: currentColor;
-}
-
-.asset-icon {
-  font-size: 3.5rem;
-  margin-bottom: 15px;
-}
-
-.asset-symbol {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #fff;
-  margin: 10px 0 5px 0;
-}
-
-.asset-name {
-  font-size: 1rem;
-  color: #aaa;
-  margin: 0;
-}
-
+/* Eski Asset Card stillerini tamamen kaldırıyorum, yukarıda yenilerini tanımladım */ 
+/* Asset arrow özelliğini kaldırıyorum çünkü küçük kartlarda kalabalık yapar */
 .asset-arrow {
-  position: absolute;
-  bottom: 15px;
-  right: 20px;
-  font-size: 1.5rem;
-  color: #00bcd4;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.asset-card:hover .asset-arrow {
-  opacity: 1;
-  right: 15px;
+  display: none;
 }
