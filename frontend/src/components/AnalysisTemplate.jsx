@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../routes/AppRoutes.jsx'
 import DecisionCard from './DecisionCard'
 import AnalysisMetrics from './AnalysisMetrics'
-import NewsSection from './NewsSection'
 import '../App.css'
 
 function AnalysisTemplate({ 
@@ -51,8 +50,6 @@ function AnalysisTemplate({
           />
 
           <AnalysisMetrics strateji={veri.strateji} />
-
-          <NewsSection haberler={veri.haberler} />
 
         </div>
       ) : (
