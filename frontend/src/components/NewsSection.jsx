@@ -4,11 +4,10 @@ function NewsSection({ haberler }) {
   if (!haberler) return null;
 
   return (
-    <div className="news-section">
-      <h4>Analiz Edilen Son Haberler</h4>
+    <div className="news-list">
       {haberler.map((haber, index) => (
         <div key={index} className="news-item">
-          <span className="news-title">{haber.baslik.substring(0, 100)}...</span>
+          <p className="news-title">{haber.baslik}</p>
           <span className={`news-tag ${haber.skor > 0 ? 'pos' : 'neg'}`}>
             {haber.skor > 0 ? "Olumlu" : "Olumsuz"}
           </span>
