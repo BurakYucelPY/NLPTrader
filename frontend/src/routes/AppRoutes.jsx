@@ -14,14 +14,10 @@ import SHIBPage from '../pages/SHIBPage'
 import TRXPage from '../pages/TRXPage'
 import DOTPage from '../pages/DOTPage'
 import LINKPage from '../pages/LINKPage'
-import MATICPage from '../pages/MATICPage'
 import LTCPage from '../pages/LTCPage'
 import BCHPage from '../pages/BCHPage'
 import NEARPage from '../pages/NEARPage'
-import UNIPage from '../pages/UNIPage'
-import PEPEPage from '../pages/PEPEPage'
 import FETPage from '../pages/FETPage'
-import RNDRPage from '../pages/RNDRPage'
 
 function AppRoutes() {
   return (
@@ -39,14 +35,10 @@ function AppRoutes() {
       <Route path={ROUTES.TRX} element={<TRXPage />} />
       <Route path={ROUTES.DOT} element={<DOTPage />} />
       <Route path={ROUTES.LINK} element={<LINKPage />} />
-      <Route path={ROUTES.MATIC} element={<MATICPage />} />
       <Route path={ROUTES.LTC} element={<LTCPage />} />
       <Route path={ROUTES.BCH} element={<BCHPage />} />
       <Route path={ROUTES.NEAR} element={<NEARPage />} />
-      <Route path={ROUTES.UNI} element={<UNIPage />} />
-      <Route path={ROUTES.PEPE} element={<PEPEPage />} />
       <Route path={ROUTES.FET} element={<FETPage />} />
-      <Route path={ROUTES.RNDR} element={<RNDRPage />} />
       <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
     </Routes>
   )

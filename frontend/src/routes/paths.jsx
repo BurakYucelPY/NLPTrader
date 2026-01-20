@@ -13,14 +13,10 @@ export const ROUTES = {
   TRX: '/trx',
   DOT: '/dot',
   LINK: '/link',
-  MATIC: '/matic',
   LTC: '/ltc',
   BCH: '/bch',
   NEAR: '/near',
-  UNI: '/uni',
-  PEPE: '/pepe',
   FET: '/fet',
-  RNDR: '/rndr',
 }
 
 // Desteklenen tüm kripto paralar
@@ -37,12 +33,8 @@ export const KRIPTO_LISTESI = [
   { sembol: 'TRX', ad: 'Tron', ikon: '⚡', renk: '#ff0013', rota: ROUTES.TRX },
   { sembol: 'DOT', ad: 'Polkadot', ikon: '●', renk: '#e6007a', rota: ROUTES.DOT },
   { sembol: 'LINK', ad: 'Chainlink', ikon: '⬡', renk: '#2a5ada', rota: ROUTES.LINK },
-  { sembol: 'MATIC', ad: 'Polygon', ikon: '⬟', renk: '#8247e5', rota: ROUTES.MATIC },
   { sembol: 'LTC', ad: 'Litecoin', ikon: 'Ł', renk: '#bfbbbb', rota: ROUTES.LTC },
   { sembol: 'BCH', ad: 'Bitcoin Cash', ikon: '₿', renk: '#8dc351', rota: ROUTES.BCH },
   { sembol: 'NEAR', ad: 'Near Protocol', ikon: 'Ⓝ', renk: '#00c1de', rota: ROUTES.NEAR },
-  { sembol: 'UNI', ad: 'Uniswap', ikon: '🦄', renk: '#ff007a', rota: ROUTES.UNI },
-  { sembol: 'PEPE', ad: 'Pepe', ikon: '🐸', renk: '#4a9c4e', rota: ROUTES.PEPE },
   { sembol: 'FET', ad: 'Fetch.ai', ikon: '🤖', renk: '#1d2951', rota: ROUTES.FET },
-  { sembol: 'RNDR', ad: 'Render', ikon: '🎨', renk: '#c9b3f5', rota: ROUTES.RNDR },
 ]
