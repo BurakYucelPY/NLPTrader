@@ -9,20 +9,38 @@ function AnalysisMetrics({ strateji }) {
       
       {/* MACD KARTI */}
       <div className="component-card macd">
-        <h3>📈 MACD (%50)</h3>
+        <h3>📈 MACD (%30)</h3>
         <div className="component-score">
           {bilesenler.macd_puan}
         </div>
-        <p>Histogram Gücü: {ham_veriler.macd_hist}</p>
+        <p>Histogram: {ham_veriler.macd_hist}</p>
       </div>
 
       {/* RSI KARTI */}
       <div className="component-card rsi">
-        <h3>⚡ RSI (%30)</h3>
+        <h3>⚡ RSI (%20)</h3>
         <div className="component-score">
           {bilesenler.rsi_puan}
         </div>
         <p>RSI Değeri: {ham_veriler.rsi_degeri}</p>
+      </div>
+
+      {/* OBV KARTI */}
+      <div className="component-card obv">
+        <h3>📊 OBV (%15)</h3>
+        <div className="component-score">
+          {bilesenler.obv_puan}
+        </div>
+        <p>Hacim Trendi: {ham_veriler.obv_trend > 0 ? "Yükseliş" : "Düşüş"}</p>
+      </div>
+
+      {/* VOLATİLİTE KARTI */}
+      <div className="component-card volatility">
+        <h3>📉 Volatilite (%15)</h3>
+        <div className="component-score">
+          {bilesenler.volatilite_puan}
+        </div>
+        <p>Yıllık: %{ham_veriler.volatilite_yillik}</p>
       </div>
 
       {/* SENTIMENT KARTI */}
