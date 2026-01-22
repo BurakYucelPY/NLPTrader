@@ -387,6 +387,12 @@ body, html {
 .component-card.rsi { border-top: 4px solid #2196f3; }
 .component-card.rsi .component-score { color: #2196f3; }
 
+.component-card.obv { border-top: 4px solid #9c27b0; }
+.component-card.obv .component-score { color: #9c27b0; }
+
+.component-card.volatility { border-top: 4px solid #00bcd4; }
+.component-card.volatility .component-score { color: #00bcd4; }
+
 .component-card.sentiment { border-top: 4px solid #e91e63; }
 .component-card.sentiment .component-score { color: #e91e63; }
 
