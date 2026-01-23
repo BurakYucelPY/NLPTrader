@@ -1,10 +1,20 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from services.finance import calculate_hybrid_strategy
 from services.nlp import get_sentiment_data, stream_news_data
 import json
 
 app = FastAPI()
+
+# CORS - Frontend'in erişebilmesi için
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/piyasa-durumu")
 def get_market_news():
