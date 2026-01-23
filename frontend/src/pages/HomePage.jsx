@@ -1,56 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import AssetCard from '../components/AssetCard'
 import NewsSection from '../components/NewsSection'
 import { KRIPTO_LISTESI } from '../routes/paths.jsx'
+import { useNews } from '../context/NewsContext.jsx'
 import '../App.css'
 
 function HomePage() {
-  const [haberler, setHaberler] = useState([])
-  const [yukleniyor, setYukleniyor] = useState(true)
-  const [toplamSkor, setToplamSkor] = useState(null)
-  const skorlarRef = useRef([])
-
-  useEffect(() => {
-    // Server-Sent Events ile canlı haber akışı
-    const eventSource = new EventSource("http://localhost:8000/piyasa-durumu-stream")
-    
-    eventSource.onmessage = (event) => {
-      if (event.data === "[DONE]") {
-        setYukleniyor(false)
-        eventSource.close()
-        return
-      }
-      
-      try {
-        const haber = JSON.parse(event.data)
-        
-        // Haberi listeye ekle
-        setHaberler(onceki => {
-          const yeniListe = [...onceki, haber]
-          // Skora göre sırala (en etkili haberler üstte)
-          return yeniListe.sort((a, b) => Math.abs(b.skor) - Math.abs(a.skor))
-        })
-        
-        // Ortalama skoru güncelle
-        skorlarRef.current.push(haber.skor)
-        const toplam = skorlarRef.current.reduce((acc, s) => acc + s, 0)
-        setToplamSkor(toplam / skorlarRef.current.length)
-        
-      } catch (e) {
-        console.error("Haber parse hatası:", e)
-      }
-    }
-    
-    eventSource.onerror = (err) => {
-      console.error("SSE bağlantı hatası:", err)
-      setYukleniyor(false)
-      eventSource.close()
-    }
-    
-    return () => {
-      eventSource.close()
-    }
-  }, [])
+  // Context'ten haberleri al - artık her sayfa değişiminde yeniden çekilmeyecek
+  const { haberler, yukleniyor, toplamSkor } = useNews()
 
   // Genel sentiment durumu
   const getSentimentDurum = () => {
