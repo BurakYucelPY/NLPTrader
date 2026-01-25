@@ -114,36 +114,176 @@ def calculate_hybrid_strategy(sembol: str):
         p_sent = np.tanh(sent_score * 2)
 
         # =============================================================
-        # 3. SKORLAMA VE KARAR
+        # 3. GELİŞMİŞ SKORLAMA VE KARAR MEKANİZMASI
         # =============================================================
-        # Ağırlıklar: MACD(%30) + RSI(%20) + OBV(%15) + Volatilite(%15) + Sentiment(%20)
-        total_score = (
-            (p_macd * 0.30) + 
-            (p_rsi * 0.20) + 
-            (p_obv * 0.15) + 
-            (p_volatility * 0.15) + 
-            (p_sent * 0.20)
-        )
         
-        # Karar Eşikleri (Thresholds)
+        # Tüm indikatörleri bir listeye al
+        indicators = {
+            'macd': {'value': p_macd, 'weight': 0.30},
+            'rsi': {'value': p_rsi, 'weight': 0.20},
+            'obv': {'value': p_obv, 'weight': 0.15},
+            'volatility': {'value': p_volatility, 'weight': 0.15},
+            'sentiment': {'value': p_sent, 'weight': 0.20}
+        }
+        
+        # A) TEMEL AĞIRLIKLI SKOR
+        total_score = sum(ind['value'] * ind['weight'] for ind in indicators.values())
+        
+        # ---------------------------------------------------------
+        # B) KONSENSÜS SKORU (İndikatör Uyumu)
+        # Kaç indikatör aynı yönde? Ne kadar uyumlular?
+        # ---------------------------------------------------------
+        values = [ind['value'] for ind in indicators.values()]
+        
+        # Pozitif ve negatif yönde olan indikatör sayısı
+        bullish_count = sum(1 for v in values if v > 0.1)
+        bearish_count = sum(1 for v in values if v < -0.1)
+        neutral_count = len(values) - bullish_count - bearish_count
+        
+        # Konsensüs oranı: 0 (tam kararsızlık) ile 1 (tam uyum) arası
+        max_agreement = max(bullish_count, bearish_count)
+        consensus_ratio = max_agreement / len(values)
+        
+        # ---------------------------------------------------------
+        # C) SİNYAL GÜCÜ (Magnitude)
+        # İndikatörlerin ortalama şiddeti - zayıf mı güçlü mü?
+        # ---------------------------------------------------------
+        signal_magnitude = np.mean([abs(v) for v in values])
+        
+        # ---------------------------------------------------------
+        # D) GÜVEN SKORU (Confidence)
+        # Konsensüs * Sinyal Gücü = Ne kadar güvenilir bir sinyal?
+        # ---------------------------------------------------------
+        raw_confidence = consensus_ratio * signal_magnitude
+        
+        # Volatilite penaltisi: Yüksek volatilitede güven düşer
+        vol_penalty = 1.0 - min(volatility_annual * 0.5, 0.4)  # Max %40 penaltı
+        
+        # Nihai güven skoru (0-1 arası, tanh ile yumuşatılmış)
+        confidence = np.tanh(raw_confidence * 2) * vol_penalty
+        
+        # ---------------------------------------------------------
+        # E) TREND TUTARLILIĞI (Directional Consistency)
+        # İndikatörler hem yön hem de güç olarak ne kadar tutarlı?
+        # ---------------------------------------------------------
+        if total_score != 0:
+            # Her indikatörün ana skorla aynı yönde olup olmadığını kontrol et
+            direction = np.sign(total_score)
+            aligned_weights = sum(
+                ind['weight'] for ind in indicators.values() 
+                if np.sign(ind['value']) == direction
+            )
+            trend_consistency = aligned_weights  # 0 ile 1 arası
+        else:
+            trend_consistency = 0.0
+        
+        # ---------------------------------------------------------
+        # F) RİSK/ÖDÜL SKORU
+        # Potansiyel kazanç vs potansiyel kayıp oranı
+        # ---------------------------------------------------------
+        # Z-score ile risk seviyesi (ortalamadan sapma = risk)
+        risk_level = min(abs(z_score) / 2, 1.0)  # 0-1 arası
+        
+        # Momentuma göre ödül potansiyeli
+        reward_potential = abs(total_score) * trend_consistency
+        
+        # Risk/Ödül oranı (1'den büyükse ödül > risk)
+        if risk_level > 0:
+            risk_reward_ratio = reward_potential / risk_level
+        else:
+            risk_reward_ratio = reward_potential * 2  # Düşük risk bonus
+        
+        risk_reward_score = np.tanh(risk_reward_ratio - 1)  # -1 ile 1 arası
+        
+        # ---------------------------------------------------------
+        # G) NİHAİ KARAR MATRİSİ (Multi-Factor Decision)
+        # Sadece skora değil, tüm faktörlere bakarak karar ver
+        # ---------------------------------------------------------
+        
+        # Final skor: Temel skor + Güven bonusu/penaltısı
+        # Güven yüksekse skor güçlenir, düşükse zayıflar
+        confidence_multiplier = 0.7 + (confidence * 0.6)  # 0.7 ile 1.3 arası
+        adjusted_score = total_score * confidence_multiplier
+        
+        # Dinamik eşikler: Volatiliteye göre ayarla
+        # Yüksek volatilitede daha yüksek eşik (daha temkinli)
+        base_strong = 0.45
+        base_normal = 0.20
+        vol_adjustment = volatility_annual * 0.3  # Volatilite etkisi
+        
+        threshold_strong = base_strong + vol_adjustment
+        threshold_normal = base_normal + (vol_adjustment * 0.5)
+        
+        # ---------------------------------------------------------
+        # H) KARAR AĞACI (Decision Tree)
+        # ---------------------------------------------------------
         karar = "BEKLE 😐"
         renk = "#bdbdbd"
+        karar_aciklama = ""
         
-        if total_score > 0.60:
-            karar = "GÜÇLÜ AL 🚀"
-            renk = "#00c853"
-        elif 0.25 <= total_score <= 0.60:
-            karar = "AL 🌱"
-            renk = "#69f0ae"
-        elif -0.25 < total_score < 0.25:
+        abs_score = abs(adjusted_score)
+        score_direction = "BUY" if adjusted_score > 0 else "SELL"
+        
+        # Güçlü Sinyal Koşulları
+        strong_signal = (
+            abs_score > threshold_strong and
+            confidence > 0.4 and
+            trend_consistency > 0.6 and
+            consensus_ratio >= 0.6
+        )
+        
+        # Normal Sinyal Koşulları
+        normal_signal = (
+            abs_score > threshold_normal and
+            confidence > 0.25 and
+            trend_consistency > 0.4
+        )
+        
+        # Zayıf Sinyal Koşulları (dikkatli ol)
+        weak_signal = (
+            abs_score > threshold_normal * 0.7 and
+            confidence > 0.15
+        )
+        
+        if adjusted_score > 0:  # AL yönlü
+            if strong_signal:
+                karar = "GÜÇLÜ AL 🚀"
+                renk = "#00c853"
+                karar_aciklama = f"Yüksek güven ({confidence:.0%}), güçlü konsensüs ({consensus_ratio:.0%})"
+            elif normal_signal:
+                karar = "AL 🌱"
+                renk = "#69f0ae"
+                karar_aciklama = f"Orta güven ({confidence:.0%}), kabul edilebilir trend tutarlılığı"
+            elif weak_signal:
+                karar = "ZAYIF AL 🤔"
+                renk = "#c8e6c9"
+                karar_aciklama = f"Düşük güven ({confidence:.0%}), dikkatli pozisyon"
+            else:
+                karar = "BEKLE 😐"
+                renk = "#bdbdbd"
+                karar_aciklama = "Yetersiz sinyal gücü veya tutarsız indikatörler"
+                
+        elif adjusted_score < 0:  # SAT yönlü
+            if strong_signal:
+                karar = "GÜÇLÜ SAT 💀"
+                renk = "#d50000"
+                karar_aciklama = f"Yüksek güven ({confidence:.0%}), güçlü düşüş konsensüsü"
+            elif normal_signal:
+                karar = "SAT 🔻"
+                renk = "#ffab91"
+                karar_aciklama = f"Orta güven ({confidence:.0%}), satış baskısı mevcut"
+            elif weak_signal:
+                karar = "ZAYIF SAT 🤔"
+                renk = "#ffccbc"
+                karar_aciklama = f"Düşük güven ({confidence:.0%}), kısmi pozisyon azaltma"
+            else:
+                karar = "BEKLE 😐"
+                renk = "#bdbdbd"
+                karar_aciklama = "Yetersiz sinyal gücü veya tutarsız indikatörler"
+        else:
             karar = "BEKLE 😐"
             renk = "#bdbdbd"
-        elif -0.60 <= total_score <= -0.25:
-            karar = "SAT 🔻"
-            renk = "#ffab91"
-        elif total_score < -0.60:
-            karar = "GÜÇLÜ SAT 💀"
-            renk = "#d50000"
+            karar_aciklama = "Nötr piyasa koşulları"
 
         # =============================================================
         # 4. ÇIKTI FORMATI
@@ -152,9 +292,23 @@ def calculate_hybrid_strategy(sembol: str):
             "sembol": sembol.upper(),
             "fiyat": round(current_price, 2),
             "strateji": {
-                "toplam_skor": round(total_score, 3),
+                "toplam_skor": round(float(total_score), 3),
+                "ayarli_skor": round(float(adjusted_score), 3),
                 "karar": karar,
                 "karar_renk": renk,
+                "karar_aciklama": karar_aciklama,
+                "guven_metrikleri": {
+                    "guven_skoru": round(float(confidence), 3),
+                    "konsensus_orani": round(float(consensus_ratio), 3),
+                    "sinyal_gucu": round(float(signal_magnitude), 3),
+                    "trend_tutarliligi": round(float(trend_consistency), 3),
+                    "risk_odul_skoru": round(float(risk_reward_score), 3)
+                },
+                "indikator_dagilimi": {
+                    "yukselis_yonlu": bullish_count,
+                    "dusus_yonlu": bearish_count,
+                    "notr": neutral_count
+                },
                 "bilesenler": {
                     "macd_puan": round(float(p_macd), 3),
                     "rsi_puan": round(float(p_rsi), 3),
@@ -162,12 +316,17 @@ def calculate_hybrid_strategy(sembol: str):
                     "volatilite_puan": round(float(p_volatility), 3),
                     "sentiment_puan": round(float(p_sent), 3)
                 },
+                "dinamik_esikler": {
+                    "guclu_esik": round(float(threshold_strong), 3),
+                    "normal_esik": round(float(threshold_normal), 3),
+                    "volatilite_etkisi": round(float(vol_adjustment), 3)
+                },
                 "ham_veriler": {
                     "rsi_degeri": round(rsi_val, 2),
                     "rsi_momentum": round(rsi_momentum, 2),
                     "macd_hist": round(current_hist, 6),
                     "macd_hist_std": round(hist_std, 6),
-                    "obv_egim": round(obv_slope * 100, 2),  # Yüzde olarak
+                    "obv_egim": round(obv_slope * 100, 2),
                     "z_score": round(z_score, 3),
                     "volatilite_yillik": round(volatility_annual * 100, 1) if not np.isnan(volatility_annual) else 0,
                     "fiyat_onceki": round(prev_price, 2),
