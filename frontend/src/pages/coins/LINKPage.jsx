@@ -8,7 +8,7 @@ function LINKPage() {
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:5199/api/Finans/link")
+      const cevap = await fetch("http://localhost:8000/fiyat/link")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
