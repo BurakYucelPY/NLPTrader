@@ -8,7 +8,7 @@ function LTCPage() {
   const analizBaslat = async () => {
     setYukleniyor(true)
     try {
-      const cevap = await fetch("http://localhost:8000/fiyat/ltc")
+      const cevap = await fetch("http://localhost:5199/api/Finans/ltc")
       const sonuc = await cevap.json()
       setVeri(sonuc)
     } catch (hata) {
