@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from services.finance import calculate_hybrid_strategy
 from services.nlp import get_sentiment_data, stream_news_data
+from services.chatbot import chat_with_groq
 import json
 
 app = FastAPI()
@@ -44,6 +45,24 @@ def get_market_news_stream():
 def get_analysis(sembol: str):
     # Tüm hesaplamayı finance.py yapıyor, biz sadece sonucu iletiyoruz
     return calculate_hybrid_strategy(sembol)
+
+@app.post("/chatbot")
+async def chatbot_endpoint(request: Request):
+    """Chatbot endpoint: analiz verisini bağlam olarak kullanarak sohbet eder"""
+    body = await request.json()
+    sembol = body.get("sembol", "")
+    mesaj = body.get("mesaj", "")
+    gecmis = body.get("gecmis", [])
+    
+    # Seçilen coin için analiz verisini çek
+    analiz_verisi = {}
+    if sembol:
+        analiz_verisi = calculate_hybrid_strategy(sembol)
+    
+    # Groq ile sohbet et
+    cevap = chat_with_groq(analiz_verisi, mesaj, gecmis)
+    
+    return {"cevap": cevap}
 
 if __name__ == "__main__":
     import uvicorn
