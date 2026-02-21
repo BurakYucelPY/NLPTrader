@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Navigate } from 'react-router-dom'
 import AnalysisTemplate from '../components/AnalysisTemplate'
 import { KRIPTO_LISTESI } from '../routes/paths.jsx'
@@ -13,22 +13,28 @@ function CoinPage() {
         (k) => k.sembol.toLowerCase() === coinId?.toLowerCase()
     )
 
+    useEffect(() => {
+        if (!kripto) return
+
+        const analizBaslat = async () => {
+            setYukleniyor(true)
+            try {
+                const cevap = await fetch(`http://localhost:5199/api/Finans/${kripto.sembol.toLowerCase()}`)
+                const sonuc = await cevap.json()
+                setVeri(sonuc)
+            } catch (hata) {
+                console.error(`${kripto.sembol} Analiz hatası:`, hata)
+            } finally {
+                setYukleniyor(false)
+            }
+        }
+
+        analizBaslat()
+    }, [coinId])
+
     // Geçersiz coin ise ana sayfaya yönlendir
     if (!kripto) {
         return <Navigate to="/" replace />
-    }
-
-    const analizBaslat = async () => {
-        setYukleniyor(true)
-        try {
-            const cevap = await fetch(`http://localhost:5199/api/Finans/${kripto.sembol.toLowerCase()}`)
-            const sonuc = await cevap.json()
-            setVeri(sonuc)
-        } catch (hata) {
-            console.error(`${kripto.sembol} Analiz hatası:`, hata)
-        } finally {
-            setYukleniyor(false)
-        }
     }
 
     return (
@@ -36,7 +42,6 @@ function CoinPage() {
             baslik={`${kripto.ikon} ${kripto.ad} (${kripto.sembol})`}
             yukleniyor={yukleniyor}
             veri={veri}
-            analizBaslatFn={analizBaslat}
         />
     )
 }
