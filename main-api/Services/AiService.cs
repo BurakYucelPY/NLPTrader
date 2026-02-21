@@ -46,7 +46,7 @@ public class AiService
         catch (Exception ex) { return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}"; }
     }
 
-    // 3. Haber/Piyasa Analizi Getirme Fonksiyonu (YENİ)
+    // 3. Haber/Piyasa Analizi Getirme Fonksiyonu
     public async Task<string> PiyasaDurumuGetir()
     {
         try
@@ -56,5 +56,12 @@ public class AiService
             else return "{ \"hata\": \"Haber verisi alınamadı.\" }";
         }
         catch (Exception ex) { return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}"; }
+    }
+
+    // 4. SSE Stream Proxy - Haberleri Python'dan stream olarak al
+    public async Task<HttpResponseMessage> PiyasaDurumuStreamGetir()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "piyasa-durumu-stream");
+        return await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
     }
 }

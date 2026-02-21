@@ -20,4 +20,23 @@ public class HaberController : ControllerBase
         var sonuc = await _aiService.PiyasaDurumuGetir();
         return Ok(sonuc);
     }
+
+    [HttpGet("stream")]
+    public async Task StreamGetir()
+    {
+        Response.ContentType = "text/event-stream";
+        Response.Headers["Cache-Control"] = "no-cache";
+        Response.Headers["Connection"] = "keep-alive";
+
+        try
+        {
+            var pythonCevap = await _aiService.PiyasaDurumuStreamGetir();
+            using var stream = await pythonCevap.Content.ReadAsStreamAsync();
+            await stream.CopyToAsync(Response.Body);
+        }
+        catch (Exception ex)
+        {
+            await Response.WriteAsync($"data: {{\"hata\": \"{ex.Message}\"}}\n\n");
+        }
+    }
 }

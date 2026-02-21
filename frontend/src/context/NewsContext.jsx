@@ -17,7 +17,7 @@ export function NewsProvider({ children }) {
 
     console.log("SSE bağlantısı kuruluyor... (deneme:", retryCountRef.current + 1, ")")
 
-    const eventSource = new EventSource("http://localhost:8000/piyasa-durumu-stream")
+    const eventSource = new EventSource("http://localhost:5199/api/Haber/stream")
 
     eventSource.onmessage = (event) => {
       if (event.data === "[DONE]") {
