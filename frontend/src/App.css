@@ -1,12 +1,14 @@
 /* Sayfa Genel Ayarları */
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #1a1a2e;
-  color: #e0e0e0; 
+  color: #e0e0e0;
   height: 100vh;
-  overflow: hidden; /* Ana sayfa scroll olmasın */
+  overflow: hidden;
+  /* Ana sayfa scroll olmasın */
 }
 
 /* ========== HOME PAGE LAYOUT ========== */
@@ -31,12 +33,12 @@ body, html {
   display: flex;
   flex-direction: column;
   background: linear-gradient(180deg, #1e1e2d 0%, #1a1a28 100%);
-  border-left: 1px solid rgba(255,255,255,0.1);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .news-header {
   padding: 25px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   flex-shrink: 0;
 }
 
@@ -90,16 +92,16 @@ body, html {
 }
 
 .news-scroll-container::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .news-scroll-container::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
 
 .news-scroll-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .news-loading {
@@ -115,8 +117,13 @@ body, html {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Haber Listesi */
@@ -127,7 +134,7 @@ body, html {
 }
 
 .news-item {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
   padding: 14px 15px 14px 0;
   border-radius: 8px;
   animation: slideIn 0.3s ease forwards;
@@ -143,7 +150,7 @@ body, html {
 }
 
 .news-item:hover {
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .news-content {
@@ -201,6 +208,157 @@ body, html {
   align-items: center;
   padding: 40px 20px;
   overflow-y: auto;
+  position: relative;
+}
+
+/* ========== COIN PAGE BACKGROUND EFFECTS ========== */
+.coin-page-bg {
+  overflow-x: hidden;
+}
+
+/* Üst Glow Çizgisi */
+.coin-glow-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  opacity: 0.7;
+  animation: coin-glow-pulse 3s ease-in-out infinite;
+  z-index: 1;
+}
+
+.coin-glow-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background: inherit;
+  filter: blur(20px);
+  opacity: 0.4;
+}
+
+@keyframes coin-glow-pulse {
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+/* Watermark - Büyük Soluk Coin İkonu */
+.coin-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28vw;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+  animation: coin-watermark-drift 20s ease-in-out infinite;
+  user-select: none;
+  line-height: 1;
+}
+
+@keyframes coin-watermark-drift {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(-48%, -52%) scale(1.03) rotate(2deg);
+  }
+
+  50% {
+    transform: translate(-52%, -48%) scale(1.06) rotate(-1deg);
+  }
+
+  75% {
+    transform: translate(-50%, -51%) scale(1.02) rotate(1deg);
+  }
+}
+
+/* Yüzen Parçacıklar */
+.coin-particle {
+  position: absolute;
+  bottom: -30px;
+  pointer-events: none;
+  z-index: 0;
+  animation: coin-float linear infinite;
+  user-select: none;
+}
+
+@keyframes coin-float {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-105vh) rotate(360deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Corner Glow Effects */
+.coin-corner-glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  pointer-events: none;
+  z-index: 0;
+  animation: coin-corner-breathe 8s ease-in-out infinite;
+}
+
+.coin-corner-glow-tl {
+  top: -150px;
+  left: -150px;
+}
+
+.coin-corner-glow-br {
+  bottom: -150px;
+  right: -150px;
+  animation-delay: 4s;
+}
+
+@keyframes coin-corner-breathe {
+
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* İçerik z-index'i (arka plan efektlerinin üstünde) */
+.coin-page-bg .back-btn,
+.coin-page-bg .title,
+.coin-page-bg .button-container,
+.coin-page-bg .dashboard {
+  position: relative;
+  z-index: 2;
 }
 
 /* Asset Kartları Grid */
@@ -216,7 +374,7 @@ body, html {
   background: #252538;
   padding: 20px 15px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: center;
@@ -232,7 +390,7 @@ body, html {
 .asset-card:hover {
   transform: translateY(-5px);
   background: #2d2d44;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   border-color: currentColor;
 }
 
@@ -260,7 +418,7 @@ body, html {
   margin-bottom: 40px;
   font-size: 2.5rem;
   color: #ffffff;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Buton Alanı */
@@ -303,8 +461,15 @@ body, html {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 1. Nihai Karar Kartı (En Üstteki Büyük Kart) */
@@ -329,7 +494,7 @@ body, html {
   font-size: 4rem;
   font-weight: 900;
   margin: 15px 0;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .score-info {
@@ -354,7 +519,7 @@ body, html {
   padding: 25px;
   border-radius: 15px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s;
 }
 
@@ -381,20 +546,45 @@ body, html {
 }
 
 /* Kartlara Özel Renkler */
-.component-card.macd { border-top: 4px solid #ff9800; }
-.component-card.macd .component-score { color: #ff9800; }
+.component-card.macd {
+  border-top: 4px solid #ff9800;
+}
 
-.component-card.rsi { border-top: 4px solid #2196f3; }
-.component-card.rsi .component-score { color: #2196f3; }
+.component-card.macd .component-score {
+  color: #ff9800;
+}
 
-.component-card.obv { border-top: 4px solid #9c27b0; }
-.component-card.obv .component-score { color: #9c27b0; }
+.component-card.rsi {
+  border-top: 4px solid #2196f3;
+}
 
-.component-card.volatility { border-top: 4px solid #00bcd4; }
-.component-card.volatility .component-score { color: #00bcd4; }
+.component-card.rsi .component-score {
+  color: #2196f3;
+}
 
-.component-card.sentiment { border-top: 4px solid #e91e63; }
-.component-card.sentiment .component-score { color: #e91e63; }
+.component-card.obv {
+  border-top: 4px solid #9c27b0;
+}
+
+.component-card.obv .component-score {
+  color: #9c27b0;
+}
+
+.component-card.volatility {
+  border-top: 4px solid #00bcd4;
+}
+
+.component-card.volatility .component-score {
+  color: #00bcd4;
+}
+
+.component-card.sentiment {
+  border-top: 4px solid #e91e63;
+}
+
+.component-card.sentiment .component-score {
+  color: #e91e63;
+}
 
 /* 3. Haber Alanı */
 .news-section {
@@ -459,8 +649,8 @@ body, html {
   position: absolute;
   top: 20px;
   left: 20px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
   padding: 10px 20px;
   border-radius: 8px;
@@ -470,7 +660,7 @@ body, html {
 }
 
 .back-btn:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* Asset arrow */
@@ -508,8 +698,15 @@ body, html {
 }
 
 @keyframes chatbot-pulse {
-  0%, 100% { box-shadow: 0 4px 20px rgba(102, 126, 234, 0.5); }
-  50% { box-shadow: 0 4px 30px rgba(102, 126, 234, 0.8); }
+
+  0%,
+  100% {
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 4px 30px rgba(102, 126, 234, 0.8);
+  }
 }
 
 /* Panel */
@@ -520,19 +717,26 @@ body, html {
   width: 380px;
   height: 520px;
   background: #1a1a2e;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 16px;
   z-index: 9998;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   animation: chatbot-slide-up 0.3s ease;
 }
 
 @keyframes chatbot-slide-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Header */
@@ -546,7 +750,7 @@ body, html {
 }
 
 .chatbot-back {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
   width: 32px;
@@ -561,7 +765,7 @@ body, html {
 }
 
 .chatbot-back:hover {
-  background: rgba(255,255,255,0.35);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 .chatbot-title {
@@ -596,7 +800,7 @@ body, html {
   align-items: center;
   gap: 4px;
   background: #252538;
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 10px;
   padding: 12px 6px;
   cursor: pointer;
@@ -607,7 +811,7 @@ body, html {
 .chatbot-coin-btn:hover {
   background: #2d2d44;
   transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border-color: currentColor;
 }
 
@@ -625,11 +829,13 @@ body, html {
 .chatbot-coin-list::-webkit-scrollbar {
   width: 4px;
 }
+
 .chatbot-coin-list::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .chatbot-coin-list::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 2px;
 }
 
@@ -646,8 +852,9 @@ body, html {
 .chatbot-messages::-webkit-scrollbar {
   width: 4px;
 }
+
 .chatbot-messages::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 2px;
 }
 
@@ -684,7 +891,7 @@ body, html {
   background: #252538;
   color: #e0e0e0;
   border-bottom-left-radius: 4px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Typing Animasyonu */
@@ -712,14 +919,24 @@ body, html {
 }
 
 @keyframes chatbot-bounce {
-  0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
-  40% { transform: scale(1); opacity: 1; }
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* Input Alanı */
 .chatbot-input-area {
   padding: 12px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   gap: 8px;
   background: #1e1e30;
@@ -729,7 +946,7 @@ body, html {
 .chatbot-input {
   flex: 1;
   background: #252538;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: 10px 14px;
   color: #e0e0e0;

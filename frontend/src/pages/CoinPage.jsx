@@ -42,6 +42,8 @@ function CoinPage() {
             baslik={`${kripto.ikon} ${kripto.ad} (${kripto.sembol})`}
             yukleniyor={yukleniyor}
             veri={veri}
+            coinRenk={kripto.renk}
+            coinSembol={kripto.ikon}
         />
     )
 }
