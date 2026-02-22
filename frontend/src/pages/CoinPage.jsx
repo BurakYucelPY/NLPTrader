@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
-import { useParams, Navigate } from 'react-router-dom'
+import { useParams, useLocation, Navigate } from 'react-router-dom'
 import AnalysisTemplate from '../components/AnalysisTemplate'
 import { KRIPTO_LISTESI } from '../routes/paths.jsx'
 
 function CoinPage() {
     const { coinId } = useParams()
+    const location = useLocation()
     const [veri, setVeri] = useState(null)
     const [yukleniyor, setYukleniyor] = useState(false)
 
@@ -16,6 +17,13 @@ function CoinPage() {
     useEffect(() => {
         if (!kripto) return
 
+        // Eğer HomePage'den veri ile geldiyse, direkt kullan
+        if (location.state?.analizVeri) {
+            setVeri(location.state.analizVeri)
+            return
+        }
+
+        // Doğrudan URL'den geldiyse, API'den çek
         const analizBaslat = async () => {
             setYukleniyor(true)
             try {

@@ -988,3 +988,230 @@ html {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ========== COIN ANALİZ OVERLAY ========== */
+.coin-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: overlay-fade-in 0.3s ease;
+}
+
+@keyframes overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.coin-overlay-content {
+  position: relative;
+  width: 90vw;
+  max-width: 960px;
+  max-height: 90vh;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px 40px 40px;
+  animation: overlay-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes overlay-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Overlay scrollbar */
+.coin-overlay-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.coin-overlay-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.coin-overlay-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+/* Kapat Butonu */
+.overlay-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Overlay Başlık */
+.overlay-title {
+  font-size: 2rem;
+  color: #fff;
+  text-align: center;
+  margin: 0 0 30px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 2;
+}
+
+/* Overlay Loading */
+.overlay-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  padding: 40px 20px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Spinner */
+.overlay-spinner {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-width: 3px;
+  border-top-style: solid;
+  animation: overlay-spin 1.2s linear infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.overlay-spinner-icon {
+  font-size: 2.5rem;
+  animation: overlay-counter-spin 1.2s linear infinite;
+}
+
+@keyframes overlay-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes overlay-counter-spin {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.overlay-loading-text {
+  color: #ccc;
+  font-size: 1.2rem;
+  text-align: center;
+  animation: overlay-text-pulse 2s ease-in-out infinite;
+}
+
+@keyframes overlay-text-pulse {
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Progress Bar */
+.overlay-loading-bar {
+  width: 260px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.overlay-loading-bar-fill {
+  width: 40%;
+  height: 100%;
+  border-radius: 4px;
+  animation: overlay-bar-slide 1.5s ease-in-out infinite;
+}
+
+@keyframes overlay-bar-slide {
+  0% {
+    width: 10%;
+    margin-left: 0;
+  }
+
+  50% {
+    width: 50%;
+    margin-left: 25%;
+  }
+
+  100% {
+    width: 10%;
+    margin-left: 90%;
+  }
+}
+
+/* Overlay Dashboard (sonuçlar) */
+.overlay-dashboard {
+  position: relative;
+  z-index: 2;
+  animation: overlay-results-in 0.6s ease;
+}
+
+@keyframes overlay-results-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Overlay içindeki coin efektleri z-index düzeltme */
+.coin-overlay-content .coin-glow-line,
+.coin-overlay-content .coin-watermark,
+.coin-overlay-content .coin-particle,
+.coin-overlay-content .coin-corner-glow {
+  border-radius: inherit;
+}

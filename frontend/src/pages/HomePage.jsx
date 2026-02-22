@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AssetCard from '../components/AssetCard'
 import NewsSection from '../components/NewsSection'
 import { KRIPTO_LISTESI } from '../routes/paths.jsx'
@@ -6,8 +7,40 @@ import { useNews } from '../context/NewsContext.jsx'
 import '../App.css'
 
 function HomePage() {
-  // Context'ten haberleri al - artık her sayfa değişiminde yeniden çekilmeyecek
+  const navigate = useNavigate()
   const { haberler, yukleniyor, toplamSkor } = useNews()
+
+  // Overlay state (sadece yükleme ekranı)
+  const [secilenCoin, setSecilenCoin] = useState(null)
+
+  // Parçacıklar (overlay arka planı için)
+  const parcaciklar = useMemo(() => {
+    return Array.from({ length: 18 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 8,
+      duration: 6 + Math.random() * 10,
+      size: 18 + Math.random() * 22,
+      opacity: 0.06 + Math.random() * 0.14,
+      isSembol: i < 5,
+    }))
+  }, [])
+
+  // Coin tıklama — overlay aç, analiz et, bitince sayfaya yönlendir
+  const coinTiklandi = useCallback(async (coin) => {
+    setSecilenCoin(coin)
+
+    try {
+      const cevap = await fetch(`http://localhost:5199/api/Finans/${coin.sembol.toLowerCase()}`)
+      const sonuc = await cevap.json()
+      // Analiz bitti — coin sayfasına yönlendir, veriyi state ile taşı
+      navigate(`/${coin.sembol.toLowerCase()}`, { state: { analizVeri: sonuc } })
+    } catch (hata) {
+      console.error(`${coin.sembol} Analiz hatası:`, hata)
+    } finally {
+      setSecilenCoin(null)
+    }
+  }, [navigate])
 
   // Genel sentiment durumu
   const getSentimentDurum = () => {
@@ -21,7 +54,7 @@ function HomePage() {
 
   return (
     <div className="home-container">
-      
+
       {/* SOL TARAF: Coinler */}
       <div className="coins-panel">
         <h1 className="title" style={{ textAlign: 'left', marginBottom: '10px' }}>🤖 NLPTrader</h1>
@@ -37,7 +70,7 @@ function HomePage() {
               ad={varlik.ad}
               ikon={varlik.ikon}
               renk={varlik.renk}
-              rotaYolu={varlik.rota}
+              onClick={coinTiklandi}
             />
           ))}
         </div>
@@ -45,7 +78,6 @@ function HomePage() {
 
       {/* SAĞ TARAF: Haber Paneli */}
       <div className="news-panel">
-        {/* Üst Kısım: Skor */}
         <div className="news-header">
           <h3>📢 Piyasa Gündemi</h3>
           <div className="sentiment-badge" style={{ background: sentiment.renk + '22', borderColor: sentiment.renk }}>
@@ -62,7 +94,6 @@ function HomePage() {
           </p>
         </div>
 
-        {/* Alt Kısım: Scrollable Haber Listesi */}
         <div className="news-scroll-container">
           {yukleniyor && haberler.length === 0 ? (
             <div className="news-loading">
@@ -74,6 +105,85 @@ function HomePage() {
           )}
         </div>
       </div>
+
+      {/* ========== YÜKLEME OVERLAY (Sadece analiz sırasında) ========== */}
+      {secilenCoin && (
+        <div className="coin-overlay">
+          <div
+            className="coin-overlay-content"
+            style={{
+              background: `
+                radial-gradient(ellipse at 20% 0%, ${secilenCoin.renk}18 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, ${secilenCoin.renk}12 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, ${secilenCoin.renk}08 0%, transparent 70%),
+                linear-gradient(180deg, #1a1a2e 0%, #16162a 100%)
+              `,
+            }}
+          >
+            {/* Üst Glow Çizgisi */}
+            <div
+              className="coin-glow-line"
+              style={{
+                background: `linear-gradient(90deg, transparent 0%, ${secilenCoin.renk} 50%, transparent 100%)`,
+              }}
+            />
+
+            {/* Watermark */}
+            <div className="coin-watermark" style={{ color: secilenCoin.renk }}>
+              {secilenCoin.ikon}
+            </div>
+
+            {/* Yüzen Parçacıklar */}
+            {parcaciklar.map((p) => (
+              <div
+                key={p.id}
+                className="coin-particle"
+                style={{
+                  left: `${p.left}%`,
+                  animationDelay: `${p.delay}s`,
+                  animationDuration: `${p.duration}s`,
+                  fontSize: p.isSembol ? `${p.size}px` : undefined,
+                  width: p.isSembol ? undefined : `${p.size}px`,
+                  height: p.isSembol ? undefined : `${p.size}px`,
+                  borderRadius: p.isSembol ? undefined : '50%',
+                  backgroundColor: p.isSembol ? undefined : secilenCoin.renk,
+                  color: p.isSembol ? secilenCoin.renk : undefined,
+                  opacity: p.opacity,
+                }}
+              >
+                {p.isSembol ? secilenCoin.ikon : ''}
+              </div>
+            ))}
+
+            {/* Corner Glows */}
+            <div
+              className="coin-corner-glow coin-corner-glow-tl"
+              style={{ background: `radial-gradient(circle, ${secilenCoin.renk}15 0%, transparent 70%)` }}
+            />
+            <div
+              className="coin-corner-glow coin-corner-glow-br"
+              style={{ background: `radial-gradient(circle, ${secilenCoin.renk}10 0%, transparent 70%)` }}
+            />
+
+            {/* Loading İçerik */}
+            <h1 className="overlay-title">
+              {secilenCoin.ikon} {secilenCoin.ad} ({secilenCoin.sembol})
+            </h1>
+
+            <div className="overlay-loading">
+              <div className="overlay-spinner" style={{ borderTopColor: secilenCoin.renk }}>
+                <span className="overlay-spinner-icon">{secilenCoin.ikon}</span>
+              </div>
+              <p className="overlay-loading-text">
+                Yapay Zeka <strong style={{ color: secilenCoin.renk }}>{secilenCoin.sembol}</strong> Analiz Ediyor...
+              </p>
+              <div className="overlay-loading-bar">
+                <div className="overlay-loading-bar-fill" style={{ background: `linear-gradient(90deg, ${secilenCoin.renk}, ${secilenCoin.renk}66)` }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   )

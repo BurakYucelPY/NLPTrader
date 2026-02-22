@@ -1,19 +1,16 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 
-function AssetCard({ 
+function AssetCard({
   sembol,        // Örn: "BTC"
   ad,            // Örn: "Bitcoin"
   ikon,          // Emoji veya ikon
   renk,          // Kart rengi
-  rotaYolu       // Yönlendirilecek sayfa
+  onClick        // Tıklama callback
 }) {
-  const navigate = useNavigate()
-
   return (
-    <div 
+    <div
       className="asset-card"
-      onClick={() => navigate(rotaYolu)}
+      onClick={() => onClick && onClick({ sembol, ad, ikon, renk })}
       style={{ borderColor: renk }}
     >
       <div className="asset-icon">{ikon}</div>
