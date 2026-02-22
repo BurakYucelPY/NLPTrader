@@ -206,7 +206,7 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 20px;
+  padding: 60px 20px 40px;
   overflow-y: auto;
   position: relative;
 }
@@ -415,6 +415,7 @@ html {
 /* Başlık */
 .title {
   text-align: center;
+  margin-top: 10px;
   margin-bottom: 40px;
   font-size: 2.5rem;
   color: #ffffff;
@@ -646,21 +647,25 @@ html {
 
 /* Geri Butonu */
 .back-btn {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 8px;
+  background: rgba(30, 30, 48, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ccc;
+  padding: 10px 18px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  z-index: 100;
 }
 
 .back-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(45, 45, 68, 0.95);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Asset arrow */
