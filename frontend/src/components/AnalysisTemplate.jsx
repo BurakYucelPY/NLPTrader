@@ -115,7 +115,7 @@ function AnalysisTemplate({
               sembol={veri.sembol}
               fiyat={veri.fiyat}
             />
-            <AnalysisMetrics strateji={veri.strateji} />
+            <AnalysisMetrics strateji={veri.strateji} coinRenk={coinRenk} />
           </div>
         ) : null}
       </div>

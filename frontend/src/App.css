@@ -475,38 +475,57 @@ html {
 
 /* 1. Nihai Karar Kartı (En Üstteki Büyük Kart) */
 .decision-card {
-  background: #2d2d44;
-  padding: 30px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  padding: 35px;
   border-radius: 20px;
   text-align: center;
-  /* Kenar rengi JSX içinden dinamik geliyor */
-  border-width: 3px;
+  border-width: 2px;
   border-style: solid;
   margin-bottom: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.decision-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
 }
 
 .decision-card h2 {
   margin: 0;
-  color: #aaa;
-  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .decision-text {
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 900;
   margin: 15px 0;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 }
 
 .score-info {
-  font-size: 1.2rem;
-  color: #ccc;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.score-info strong {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* 2. Bileşenler Izgarası (3'lü yan yana kartlar) */
 .components-grid {
   display: flex;
-  gap: 20px;
+  gap: 14px;
   flex-wrap: wrap;
   justify-content: center;
   margin-bottom: 30px;
@@ -515,72 +534,90 @@ html {
 /* Küçük Kartlar Genel Stil */
 .component-card {
   flex: 1;
-  min-width: 220px;
-  background: #252538;
-  padding: 25px;
-  border-radius: 15px;
+  min-width: 200px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  padding: 22px 18px;
+  border-radius: 16px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.component-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 16px 16px 0 0;
 }
 
 .component-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .component-card h3 {
   margin-top: 0;
-  font-size: 1.1rem;
-  color: #ddd;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 500;
 }
 
 .component-score {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin: 15px 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 12px 0;
 }
 
 .component-card p {
-  font-size: 0.9rem;
-  color: #888;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.35);
   margin-bottom: 0;
 }
 
 /* Kartlara Özel Renkler */
-.component-card.macd {
-  border-top: 4px solid #ff9800;
+.component-card.macd::before {
+  background: linear-gradient(90deg, #ff9800, #ff980066);
 }
 
 .component-card.macd .component-score {
   color: #ff9800;
 }
 
-.component-card.rsi {
-  border-top: 4px solid #2196f3;
+.component-card.rsi::before {
+  background: linear-gradient(90deg, #2196f3, #2196f366);
 }
 
 .component-card.rsi .component-score {
   color: #2196f3;
 }
 
-.component-card.obv {
-  border-top: 4px solid #9c27b0;
+.component-card.obv::before {
+  background: linear-gradient(90deg, #9c27b0, #9c27b066);
 }
 
 .component-card.obv .component-score {
   color: #9c27b0;
 }
 
-.component-card.volatility {
-  border-top: 4px solid #00bcd4;
+.component-card.volatility::before {
+  background: linear-gradient(90deg, #00bcd4, #00bcd466);
 }
 
 .component-card.volatility .component-score {
   color: #00bcd4;
 }
 
-.component-card.sentiment {
-  border-top: 4px solid #e91e63;
+.component-card.sentiment::before {
+  background: linear-gradient(90deg, #e91e63, #e91e6366);
 }
 
 .component-card.sentiment .component-score {
