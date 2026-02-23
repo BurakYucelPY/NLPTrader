@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AssetCard from '../components/AssetCard'
 import NewsSection from '../components/NewsSection'
+import PixelBlast from '../components/PixelBlast'
 import { KRIPTO_LISTESI } from '../routes/paths.jsx'
 import { useNews } from '../context/NewsContext.jsx'
 import '../App.css'
@@ -57,12 +58,36 @@ function HomePage() {
 
       {/* SOL TARAF: Coinler */}
       <div className="coins-panel">
-        <h1 className="title" style={{ textAlign: 'left', marginBottom: '10px' }}>🤖 NLPTrader</h1>
-        <p style={{ color: '#aaa', marginBottom: '40px', fontSize: '1rem' }}>
+
+        {/* PixelBlast Arka Plan */}
+        <div className="pixel-blast-bg">
+          <PixelBlast
+            variant="square"
+            pixelSize={4}
+            color="#B19EEF"
+            patternScale={2}
+            patternDensity={1}
+            pixelSizeJitter={0}
+            enableRipples
+            rippleSpeed={0.4}
+            rippleThickness={0.12}
+            rippleIntensityScale={1.5}
+            liquid={false}
+            liquidStrength={0.12}
+            liquidRadius={1.2}
+            liquidWobbleSpeed={5}
+            speed={0.5}
+            edgeFade={0.25}
+            transparent
+          />
+        </div>
+
+        <h1 className="title" style={{ textAlign: 'left', marginBottom: '10px', position: 'relative', zIndex: 2 }}>🤖 NLPTrader</h1>
+        <p style={{ color: '#aaa', marginBottom: '40px', fontSize: '1rem', position: 'relative', zIndex: 2 }}>
           Yapay zeka analizini başlatmak için bir varlık seçin.
         </p>
 
-        <div className="assets-grid">
+        <div className="assets-grid" style={{ position: 'relative', zIndex: 2 }}>
           {KRIPTO_LISTESI.map((varlik) => (
             <AssetCard
               key={varlik.sembol}

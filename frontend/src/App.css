@@ -24,6 +24,17 @@ html {
   padding: 40px;
   overflow-y: auto;
   background: #1a1a2e;
+  position: relative;
+}
+
+/* PixelBlast Arka Plan Katmanı */
+.pixel-blast-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
 }
 
 /* Sağ Panel: Haberler */
