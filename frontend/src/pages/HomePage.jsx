@@ -82,10 +82,12 @@ function HomePage() {
           />
         </div>
 
-        <h1 className="title" style={{ textAlign: 'left', marginBottom: '10px', position: 'relative', zIndex: 2 }}>🤖 NLPTrader</h1>
-        <p style={{ color: '#aaa', marginBottom: '40px', fontSize: '1rem', position: 'relative', zIndex: 2 }}>
-          Yapay zeka analizini başlatmak için bir varlık seçin.
-        </p>
+        <div className="home-hero" style={{ position: 'relative', zIndex: 2 }}>
+          <h1 className="home-title">
+            <span className="home-title-accent">NLP</span>Trader
+          </h1>
+          <p className="home-subtitle">Yapay zeka destekli kripto analiz platformu</p>
+        </div>
 
         <div className="assets-grid" style={{ position: 'relative', zIndex: 2 }}>
           {KRIPTO_LISTESI.map((varlik) => (
@@ -104,7 +106,7 @@ function HomePage() {
       {/* SAĞ TARAF: Haber Paneli */}
       <div className="news-panel">
         <div className="news-header">
-          <h3>📢 Piyasa Gündemi</h3>
+          <h3 className="news-panel-title">Piyasa Gündemi</h3>
           <div className="sentiment-badge" style={{ background: sentiment.renk + '22', borderColor: sentiment.renk }}>
             <span className="sentiment-emoji">{sentiment.emoji}</span>
             <span className="sentiment-text" style={{ color: sentiment.renk }}>{sentiment.text}</span>

@@ -37,6 +37,46 @@ html {
   z-index: 0;
 }
 
+/* ========== HOMEPAGE TYPOGRAPHY ========== */
+.home-hero {
+  margin-bottom: 36px;
+}
+
+.home-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+  margin: 0 0 8px 0;
+  line-height: 1.1;
+}
+
+.home-title-accent {
+  background: linear-gradient(135deg, #a78bfa, #818cf8, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.home-subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  letter-spacing: 0.5px;
+  font-weight: 400;
+}
+
+/* News Panel Title */
+.news-panel-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 15px 0;
+  padding-left: 12px;
+  border-left: 3px solid #818cf8;
+  letter-spacing: 0.3px;
+}
+
 /* Sağ Panel: Haberler */
 .news-panel {
   width: 420px;
