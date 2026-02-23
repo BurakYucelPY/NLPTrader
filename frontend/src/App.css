@@ -16,6 +16,8 @@ html {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  position: relative;
+  background: #1a1a2e;
 }
 
 /* Sol Panel: Coinler */
@@ -23,8 +25,9 @@ html {
   flex: 1;
   padding: 40px;
   overflow-y: auto;
-  background: #1a1a2e;
+  background: transparent;
   position: relative;
+  z-index: 1;
 }
 
 /* PixelBlast Arka Plan Katmanı */
@@ -77,14 +80,17 @@ html {
   letter-spacing: 0.3px;
 }
 
-/* Sağ Panel: Haberler */
+/* Sağ Panel: Haberler (Glassmorphism) */
 .news-panel {
   width: 420px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #1e1e2d 0%, #1a1a28 100%);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(18, 18, 36, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  z-index: 1;
 }
 
 .news-header {
