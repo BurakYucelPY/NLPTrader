@@ -28,36 +28,14 @@ function ChatBot() {
     }
   }
 
-  // Coin seçildiğinde
-  const coinSec = async (coin) => {
+  // Coin seçildiğinde — hoşgeldin mesajı göster
+  const coinSec = (coin) => {
     setSecilenCoin(coin)
-    setMesajlar([])
     setDurum('chat')
-    setYukleniyor(true)
-
-    try {
-      const response = await fetch(CHATBOT_API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sembol: coin.sembol,
-          mesaj: `${coin.sembol} (${coin.ad}) için mevcut analiz durumunu kısaca özetle. Karar ne yönde, güven skoru nasıl?`,
-          gecmis: []
-        })
-      })
-      const data = await response.json()
-      setMesajlar([{
-        role: 'assistant',
-        content: data.cevap
-      }])
-    } catch (err) {
-      setMesajlar([{
-        role: 'assistant',
-        content: '⚠️ Bağlantı hatası. Python backend çalışıyor mu kontrol edin.'
-      }])
-    } finally {
-      setYukleniyor(false)
-    }
+    setMesajlar([{
+      role: 'assistant',
+      content: `Merhaba! 👋 ${coin.ikon} ${coin.ad} (${coin.sembol}) hakkında ne öğrenmek istersin?\n\nÖrneğin şunları sorabilirsin:\n• "Şu anki analiz durumu ne?"\n• "Almalı mıyım satmalı mıyım?"\n• "RSI ve MACD ne gösteriyor?"\n• "Risk analizi yap"`
+    }])
   }
 
   // Mesaj gönder
@@ -83,7 +61,7 @@ function ChatBot() {
         body: JSON.stringify({
           sembol: secilenCoin.sembol,
           mesaj: inputDeger.trim(),
-          gecmis: gecmis.slice(0, -1) // Son mesajı (user) chatbot.py kendisi ekliyor
+          gecmis: gecmis.slice(0, -1)
         })
       })
       const data = await response.json()
@@ -126,15 +104,15 @@ function ChatBot() {
       {/* Panel */}
       {durum !== 'closed' && (
         <div className="chatbot-panel">
-          
+
           {/* Header */}
           <div className="chatbot-header">
             {durum === 'chat' && (
               <button className="chatbot-back" onClick={geriDon}>←</button>
             )}
             <span className="chatbot-title">
-              {durum === 'coin-select' 
-                ? '🤖 NLPTrader Asistan' 
+              {durum === 'coin-select'
+                ? '🤖 NLPTrader Asistan'
                 : `💬 ${secilenCoin?.sembol} Analiz Sohbeti`}
             </span>
           </div>
@@ -189,7 +167,7 @@ function ChatBot() {
                   onKeyDown={handleKeyDown}
                   disabled={yukleniyor}
                 />
-                <button 
+                <button
                   className="chatbot-send"
                   onClick={mesajGonder}
                   disabled={yukleniyor || !inputDeger.trim()}
