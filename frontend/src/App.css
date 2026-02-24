@@ -523,17 +523,21 @@ html {
   display: flex;
   gap: 20px;
   margin-top: 20px;
-  align-items: stretch;
+  position: relative;
 }
 
 .dashboard-left {
   flex: 7;
   min-width: 0;
+  padding-right: calc(30% + 20px);
 }
 
 .dashboard-right {
-  flex: 3;
-  min-width: 280px;
+  width: 30%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
 }
