@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from services.finance import calculate_hybrid_strategy
 from services.nlp import get_sentiment_data, stream_news_data
-from services.chatbot import chat_with_groq
+from services.chatbot import chat_with_groq, generate_ai_commentary
 import yfinance as yf
 import json
 
@@ -64,6 +64,18 @@ async def chatbot_endpoint(request: Request):
     cevap = chat_with_groq(analiz_verisi, mesaj, gecmis)
     
     return {"cevap": cevap}
+
+@app.get("/yorum/{sembol}")
+def get_ai_commentary(sembol: str):
+    """Coin için yapay zeka yorumu üretir"""
+    try:
+        analiz_verisi = calculate_hybrid_strategy(sembol)
+        if "hata" in analiz_verisi:
+            return {"hata": analiz_verisi["hata"]}
+        yorum = generate_ai_commentary(analiz_verisi)
+        return {"sembol": sembol.upper(), "yorum": yorum}
+    except Exception as e:
+        return {"hata": str(e)}
 
 @app.get("/grafik/{sembol}")
 def get_chart_data(sembol: str, periyot: str = Query("6mo")):
