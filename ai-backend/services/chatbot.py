@@ -111,3 +111,62 @@ def chat_with_groq(analiz_verisi: dict, mesaj: str, gecmis: list = None) -> str:
         return response.choices[0].message.content
     except Exception as e:
         return f"Bir hata oluştu: {str(e)}"
+
+
+def generate_ai_commentary(analiz_verisi: dict) -> str:
+    """
+    Analiz verisini alır ve detaylı bir yapay zeka yorumu üretir.
+    """
+    if not analiz_verisi or "hata" in analiz_verisi:
+        return "Analiz verisi bulunamadığı için yorum üretilemedi."
+
+    s = analiz_verisi.get("strateji", {})
+    b = s.get("bilesenler", {})
+    g = s.get("guven_metrikleri", {})
+    h = s.get("ham_veriler", {})
+
+    system_prompt = f"""Sen profesyonel bir kripto para piyasa analistisin. Aşağıdaki teknik analiz verilerine dayanarak
+detaylı, profesyonel ve Türkçe bir piyasa yorumu yaz.
+
+VARLIK: {analiz_verisi.get('sembol', '?')}
+FİYAT: ${analiz_verisi.get('fiyat', 'N/A')}
+KARAR: {s.get('karar', 'N/A')} (Skor: {s.get('toplam_skor', 'N/A')})
+
+İNDİKATÖRLER:
+- MACD Puan: {b.get('macd_puan', 'N/A')} | Histogram: {h.get('macd_hist', 'N/A')}
+- RSI Puan: {b.get('rsi_puan', 'N/A')} | Değer: {h.get('rsi_degeri', 'N/A')}
+- OBV Puan: {b.get('obv_puan', 'N/A')} | Eğim: %{h.get('obv_egim', 'N/A')}
+- Volatilite Puan: {b.get('volatilite_puan', 'N/A')} | Yıllık: %{h.get('volatilite_yillik', 'N/A')}
+- Sentiment Puan: {b.get('sentiment_puan', 'N/A')} | Kaynak: {h.get('haber_kaynak', 'N/A')}
+
+GÜVEN: Skor={g.get('guven_skoru', 'N/A')}, Konsensüs={g.get('konsensus_orani', 'N/A')}, Sinyal={g.get('sinyal_gucu', 'N/A')}
+Z-Score: {h.get('z_score', 'N/A')}, SMA-20: ${h.get('sma_20', 'N/A')}
+
+KURALLAR:
+1. Markdown formatında yaz.
+2. Şu bölümleri içer:
+   - 📊 **Genel Bakış** (2-3 cümle özet)
+   - 📈 **Teknik Analiz** (MACD, RSI, OBV yorumu)
+   - 📰 **Piyasa Duyarlılığı** (sentiment analizi)
+   - ⚠️ **Risk Değerlendirmesi** (volatilite ve risk)
+   - 🎯 **Sonuç** (kısa öneri ve uyarı)
+3. Her bölüm 2-3 cümle olsun, çok uzatma.
+4. Profesyonel ve güvenilir bir ton kullan.
+5. "Bu yatırım tavsiyesi değildir" uyarısını sonunda ekle.
+6. Emoji kullanarak okunabilirliği artır."""
+
+    user_prompt = f"{analiz_verisi.get('sembol', 'BTC')} için güncel piyasa yorumunu yaz."
+
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.7,
+            max_tokens=1500,
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"Yorum üretilemedi: {str(e)}"
