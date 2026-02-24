@@ -527,13 +527,13 @@ html {
 }
 
 .dashboard-left {
-  flex: 1;
+  flex: 7;
   min-width: 0;
 }
 
 .dashboard-right {
-  width: 340px;
-  flex-shrink: 0;
+  flex: 3;
+  min-width: 280px;
 }
 
 /* Yapay Zeka Yorumu Placeholder */
@@ -1379,7 +1379,7 @@ html {
 
 .price-chart-wrapper {
   width: 100%;
-  margin-bottom: 0;
+  margin-bottom: 16px;
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(12px);
   border-radius: 16px;

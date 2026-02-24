@@ -112,15 +112,13 @@ function AnalysisTemplate({
           </div>
         ) : veri && veri.strateji ? (
           <div className="dashboard">
-            {/* Üst: Grafik (Tam genişlik) */}
-            {coinSembolStr && (
-              <PriceChart sembol={coinSembolStr} coinRenk={coinRenk} />
-            )}
-
-            {/* Alt: İki sütunlu alan */}
+            {/* İki sütunlu alan: Sol %70, Sağ %30 */}
             <div className="dashboard-columns">
-              {/* Sol: Karar kartı + Metrik kartlar */}
+              {/* Sol: Grafik + Karar kartı + Metrik kartlar */}
               <div className="dashboard-left">
+                {coinSembolStr && (
+                  <PriceChart sembol={coinSembolStr} coinRenk={coinRenk} />
+                )}
                 <DecisionCard
                   data={veri.strateji}
                   sembol={veri.sembol}
