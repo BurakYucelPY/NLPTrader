@@ -20,4 +20,11 @@ public class FinansController : ControllerBase
         var sonuc = await _aiService.FiyatGetir(sembol);
         return Ok(sonuc);
     }
+
+    [HttpGet("grafik/{sembol}")]
+    public async Task<IActionResult> GrafikGetir(string sembol, [FromQuery] string periyot = "6mo")
+    {
+        var sonuc = await _aiService.GrafikGetir(sembol, periyot);
+        return Content(sonuc, "application/json");
+    }
 }

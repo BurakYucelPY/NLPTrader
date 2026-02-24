@@ -64,4 +64,15 @@ public class AiService
         var request = new HttpRequestMessage(HttpMethod.Get, "piyasa-durumu-stream");
         return await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
     }
+    // 5. Grafik Verisi Getirme Fonksiyonu
+    public async Task<string> GrafikGetir(string sembol, string periyot)
+    {
+        try
+        {
+            var cevap = await _httpClient.GetAsync($"grafik/{sembol}?periyot={periyot}");
+            if (cevap.IsSuccessStatusCode) return await cevap.Content.ReadAsStringAsync();
+            else return "{ \"hata\": \"Grafik verisi alınamadı.\" }";
+        }
+        catch (Exception ex) { return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}"; }
+    }
 }
