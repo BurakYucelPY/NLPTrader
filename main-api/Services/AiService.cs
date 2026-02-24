@@ -75,4 +75,16 @@ public class AiService
         }
         catch (Exception ex) { return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}"; }
     }
+    // 6. Yapay Zeka Yorumu Getirme
+    public async Task<string> YorumGetir(string sembol)
+    {
+        try
+        {
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(120));
+            var cevap = await _httpClient.GetAsync($"yorum/{sembol}", cts.Token);
+            if (cevap.IsSuccessStatusCode) return await cevap.Content.ReadAsStringAsync();
+            else return "{ \"hata\": \"Yorum alınamadı.\" }";
+        }
+        catch (Exception ex) { return $"{{ \"hata\": \"Bağlantı hatası: {ex.Message}\" }}"; }
+    }
 }

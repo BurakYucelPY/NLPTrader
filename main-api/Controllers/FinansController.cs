@@ -27,4 +27,11 @@ public class FinansController : ControllerBase
         var sonuc = await _aiService.GrafikGetir(sembol, periyot);
         return Content(sonuc, "application/json");
     }
+
+    [HttpGet("yorum/{sembol}")]
+    public async Task<IActionResult> YorumGetir(string sembol)
+    {
+        var sonuc = await _aiService.YorumGetir(sembol);
+        return Content(sonuc, "application/json");
+    }
 }
