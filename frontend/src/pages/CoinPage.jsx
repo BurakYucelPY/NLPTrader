@@ -52,6 +52,7 @@ function CoinPage() {
             veri={veri}
             coinRenk={kripto.renk}
             coinSembol={kripto.ikon}
+            coinSembolStr={kripto.sembol}
         />
     )
 }

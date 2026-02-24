@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../routes/AppRoutes.jsx'
 import DecisionCard from './DecisionCard'
 import AnalysisMetrics from './AnalysisMetrics'
+import PriceChart from './PriceChart'
 import '../App.css'
 
 function AnalysisTemplate({
@@ -11,6 +12,7 @@ function AnalysisTemplate({
   veri,
   coinRenk = '#007bff',
   coinSembol = '●',
+  coinSembolStr = '',
 }) {
   const navigate = useNavigate()
 
@@ -115,6 +117,9 @@ function AnalysisTemplate({
               sembol={veri.sembol}
               fiyat={veri.fiyat}
             />
+            {coinSembolStr && (
+              <PriceChart sembol={coinSembolStr} coinRenk={coinRenk} />
+            )}
             <AnalysisMetrics strateji={veri.strateji} coinRenk={coinRenk} />
           </div>
         ) : null}
