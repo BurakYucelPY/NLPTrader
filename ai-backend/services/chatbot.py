@@ -124,38 +124,92 @@ def generate_ai_commentary(analiz_verisi: dict) -> str:
     b = s.get("bilesenler", {})
     g = s.get("guven_metrikleri", {})
     h = s.get("ham_veriler", {})
+    fiyat = analiz_verisi.get('fiyat', 'N/A')
+    sembol = analiz_verisi.get('sembol', '?')
+    karar = s.get('karar', 'N/A')
+    skor = s.get('toplam_skor', 0)
 
-    system_prompt = f"""Sen profesyonel bir kripto para piyasa analistisin. Aşağıdaki teknik analiz verilerine dayanarak
-detaylı, profesyonel ve Türkçe bir piyasa yorumu yaz.
+    # RSI durumunu yorumla
+    rsi = h.get('rsi_degeri', 50)
+    try:
+        rsi_val = float(rsi)
+        if rsi_val < 30: rsi_durum = "asiri satim bolgesinde, potansiyel dip sinyali"
+        elif rsi_val < 40: rsi_durum = "zayif bolgede, saticilar baskin"
+        elif rsi_val < 60: rsi_durum = "notr bolgede, kararsiz piyasa"
+        elif rsi_val < 70: rsi_durum = "guclu bolgede, alicilar baskin"
+        else: rsi_durum = "asiri alim bolgesinde, duzeltme riski yuksek"
+    except:
+        rsi_durum = "belirsiz"
 
-VARLIK: {analiz_verisi.get('sembol', '?')}
-FİYAT: ${analiz_verisi.get('fiyat', 'N/A')}
-KARAR: {s.get('karar', 'N/A')} (Skor: {s.get('toplam_skor', 'N/A')})
+    # Hacim akisi
+    obv_egim = h.get('obv_egim', 0)
+    try:
+        obv_val = float(obv_egim)
+        if obv_val > 5: hacim_durum = "guclu para girisi var"
+        elif obv_val > 0: hacim_durum = "hafif para girisi var"
+        elif obv_val > -5: hacim_durum = "hafif para cikisi var"
+        else: hacim_durum = "ciddi para cikisi var"
+    except:
+        hacim_durum = "belirsiz"
 
-İNDİKATÖRLER:
-- MACD Puan: {b.get('macd_puan', 'N/A')} | Histogram: {h.get('macd_hist', 'N/A')}
-- RSI Puan: {b.get('rsi_puan', 'N/A')} | Değer: {h.get('rsi_degeri', 'N/A')}
-- OBV Puan: {b.get('obv_puan', 'N/A')} | Eğim: %{h.get('obv_egim', 'N/A')}
-- Volatilite Puan: {b.get('volatilite_puan', 'N/A')} | Yıllık: %{h.get('volatilite_yillik', 'N/A')}
-- Sentiment Puan: {b.get('sentiment_puan', 'N/A')} | Kaynak: {h.get('haber_kaynak', 'N/A')}
+    # Volatilite
+    vol = h.get('volatilite_yillik', 50)
+    try:
+        vol_val = float(vol)
+        if vol_val > 80: vol_durum = "cok yuksek, sert hareketler beklenmeli"
+        elif vol_val > 50: vol_durum = "yuksek, dikkatli olunmali"
+        elif vol_val > 30: vol_durum = "orta seviyede"
+        else: vol_durum = "dusuk, sakin piyasa"
+    except:
+        vol_durum = "belirsiz"
 
-GÜVEN: Skor={g.get('guven_skoru', 'N/A')}, Konsensüs={g.get('konsensus_orani', 'N/A')}, Sinyal={g.get('sinyal_gucu', 'N/A')}
-Z-Score: {h.get('z_score', 'N/A')}, SMA-20: ${h.get('sma_20', 'N/A')}
+    # SMA karsilastirma
+    sma = h.get('sma_20', fiyat)
+    try:
+        fiyat_vs_sma = "uzerinde seyrediyor (yukselis trendi)" if float(fiyat) > float(sma) else "altinda seyrediyor (dusus trendi)"
+    except:
+        fiyat_vs_sma = "belirsiz"
 
-KURALLAR:
-1. Markdown formatında yaz.
-2. Şu bölümleri içer:
-   - 📊 **Genel Bakış** (2-3 cümle özet)
-   - 📈 **Teknik Analiz** (MACD, RSI, OBV yorumu)
-   - 📰 **Piyasa Duyarlılığı** (sentiment analizi)
-   - ⚠️ **Risk Değerlendirmesi** (volatilite ve risk)
-   - 🎯 **Sonuç** (kısa öneri ve uyarı)
-3. Her bölüm 2-3 cümle olsun, çok uzatma.
-4. Profesyonel ve güvenilir bir ton kullan.
-5. "Bu yatırım tavsiyesi değildir" uyarısını sonunda ekle.
-6. Emoji kullanarak okunabilirliği artır."""
+    system_prompt = f"""Sen Bloomberg ve Reuters'te 15 yil deneyimli, kidemli bir kripto para piyasa analistisin.
+Sana verilen teknik analiz sonuclarini YORUMLAYARAK profesyonel bir piyasa degerlendirmesi yazacaksin.
 
-    user_prompt = f"{analiz_verisi.get('sembol', 'BTC')} için güncel piyasa yorumunu yaz."
+KRITIK KURALLAR:
+1. ASLA ham sayilari veya puan degerlerini dogrudan yazma. "MACD puani 0.455" gibi ifadeler YASAK.
+2. Bunun yerine verilerin NE ANLAMA GELDIGINI acikla. "Momentum gostergeleri yukari yonlu bir baski olusturuyor" gibi.
+3. Piyasa psikolojisi ve yatirimci davranislarindan bahset.
+4. Tarihsel baglam ver: benzer durumlarda piyasa nasil hareket etti?
+5. Somut senaryolar sun: "Bu seviye kirilirsa su olabilir, tutunursa su olabilir."
+6. Bir arkadasina WhatsApp'tan piyasa analizi anlatir gibi samimi ama profesyonel yaz.
+7. Turkce yaz. Markdown formati kullan.
+8. Her bolum 3-4 cumle olsun.
+
+SANA VERILEN ANALIZ OZETI (bunu kullaniciya tekrarlama, yorumla):
+- Varlik: {sembol}, Fiyat: ${fiyat}
+- Sistem karari: {karar} (skor: {skor})
+- RSI durumu: {rsi_durum}
+- Hacim akisi: {hacim_durum}
+- Volatilite: {vol_durum}
+- Fiyat SMA-20'nin {fiyat_vs_sma}
+- Haber sentiment: {b.get('sentiment_puan', 'N/A')} (negatiften pozitife -1 ile +1 arasi)
+- Konsensus: {g.get('konsensus_orani', 'N/A')}, Sinyal gucu: {g.get('sinyal_gucu', 'N/A')}
+
+YAZI YAPISI:
+## Piyasa Gorunumu
+(Genel durum, fiyatin nerede oldugu, trendin yonu hakkinda baglamsal bir giris)
+
+## Teknik Degerlendirme
+(Gostergelerin ne anlattigini YORUMLA - momentum, trend gucu, alici/satici dengesi)
+
+## Piyasa Psikolojisi
+(Yatirimcilar su an ne dusunuyor olabilir? Korku mu acgozluluk mu hakim? Haberler ne diyor?)
+
+## Kritik Seviyeler ve Senaryolar
+(Fiyat nereye gidebilir? Hangi seviyeler onemli? Iki farkli senaryo sun)
+
+## Strateji Onerisi
+(Ne yapilmali? Kisa ve net. Son satirda "Bu bir yatirim tavsiyesi degildir" uyarisi)"""
+
+    user_prompt = f"{sembol} icin piyasa analiz raporunu hazirla."
 
     try:
         response = client.chat.completions.create(
@@ -164,9 +218,10 @@ KURALLAR:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            temperature=0.7,
-            max_tokens=1500,
+            temperature=0.8,
+            max_tokens=2000,
         )
         return response.choices[0].message.content
     except Exception as e:
-        return f"Yorum üretilemedi: {str(e)}"
+        return f"Yorum uretilemedi: {str(e)}"
+
