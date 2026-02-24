@@ -112,15 +112,37 @@ function AnalysisTemplate({
           </div>
         ) : veri && veri.strateji ? (
           <div className="dashboard">
-            <DecisionCard
-              data={veri.strateji}
-              sembol={veri.sembol}
-              fiyat={veri.fiyat}
-            />
+            {/* Üst: Grafik (Tam genişlik) */}
             {coinSembolStr && (
               <PriceChart sembol={coinSembolStr} coinRenk={coinRenk} />
             )}
-            <AnalysisMetrics strateji={veri.strateji} coinRenk={coinRenk} />
+
+            {/* Alt: İki sütunlu alan */}
+            <div className="dashboard-columns">
+              {/* Sol: Karar kartı + Metrik kartlar */}
+              <div className="dashboard-left">
+                <DecisionCard
+                  data={veri.strateji}
+                  sembol={veri.sembol}
+                  fiyat={veri.fiyat}
+                />
+                <AnalysisMetrics strateji={veri.strateji} coinRenk={coinRenk} />
+              </div>
+
+              {/* Sağ: Yapay Zeka Yorumu (ileride eklenecek) */}
+              <div className="dashboard-right">
+                <div className="ai-commentary-placeholder" style={{ borderColor: coinRenk + '30' }}>
+                  <div className="ai-commentary-icon">🤖</div>
+                  <h3 className="ai-commentary-title">Yapay Zeka Yorumu</h3>
+                  <p className="ai-commentary-desc">
+                    Yakında burada yapay zeka destekli detaylı piyasa analizi ve yorum yer alacak.
+                  </p>
+                  <div className="ai-commentary-badge" style={{ background: coinRenk + '20', color: coinRenk }}>
+                    Çok Yakında
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         ) : null}
       </div>
