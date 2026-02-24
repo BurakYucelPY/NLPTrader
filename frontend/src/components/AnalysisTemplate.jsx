@@ -4,6 +4,7 @@ import { ROUTES } from '../routes/AppRoutes.jsx'
 import DecisionCard from './DecisionCard'
 import AnalysisMetrics from './AnalysisMetrics'
 import PriceChart from './PriceChart'
+import AiCommentary from './AiCommentary'
 import '../App.css'
 
 function AnalysisTemplate({
@@ -127,18 +128,11 @@ function AnalysisTemplate({
                 <AnalysisMetrics strateji={veri.strateji} coinRenk={coinRenk} />
               </div>
 
-              {/* Sağ: Yapay Zeka Yorumu (ileride eklenecek) */}
+              {/* Sağ: Yapay Zeka Yorumu */}
               <div className="dashboard-right">
-                <div className="ai-commentary-placeholder" style={{ borderColor: coinRenk + '30' }}>
-                  <div className="ai-commentary-icon">🤖</div>
-                  <h3 className="ai-commentary-title">Yapay Zeka Yorumu</h3>
-                  <p className="ai-commentary-desc">
-                    Yakında burada yapay zeka destekli detaylı piyasa analizi ve yorum yer alacak.
-                  </p>
-                  <div className="ai-commentary-badge" style={{ background: coinRenk + '20', color: coinRenk }}>
-                    Çok Yakında
-                  </div>
-                </div>
+                {coinSembolStr && (
+                  <AiCommentary sembol={coinSembolStr} coinRenk={coinRenk} />
+                )}
               </div>
             </div>
           </div>
