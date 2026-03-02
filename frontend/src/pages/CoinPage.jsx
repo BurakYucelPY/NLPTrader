@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useLocation, Navigate } from 'react-router-dom'
 import AnalysisTemplate from '../components/AnalysisTemplate'
 import { KRIPTO_LISTESI } from '../routes/paths.jsx'
+import { API_BASE } from '../config/api'
 
 function CoinPage() {
     const { coinId } = useParams()
@@ -27,7 +28,7 @@ function CoinPage() {
         const analizBaslat = async () => {
             setYukleniyor(true)
             try {
-                const cevap = await fetch(`http://localhost:5199/api/Finans/${kripto.sembol.toLowerCase()}`)
+                const cevap = await fetch(`${API_BASE}/fiyat/${kripto.sembol.toLowerCase()}`)
                 const sonuc = await cevap.json()
                 setVeri(sonuc)
             } catch (hata) {

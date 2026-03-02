@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { API_BASE } from '../config/api'
 
 function AiCommentary({ sembol, coinRenk = '#007bff' }) {
     const [yorum, setYorum] = useState(null)
@@ -13,7 +14,7 @@ function AiCommentary({ sembol, coinRenk = '#007bff' }) {
             setHata(null)
             try {
                 const res = await fetch(
-                    `http://localhost:5199/api/Finans/yorum/${sembol.toLowerCase()}`
+                    `${API_BASE}/yorum/${sembol.toLowerCase()}`
                 )
                 const data = await res.json()
                 if (data.hata) {

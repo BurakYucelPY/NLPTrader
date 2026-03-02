@@ -5,6 +5,7 @@ import NewsSection from '../components/NewsSection'
 import PixelBlast from '../components/PixelBlast'
 import { KRIPTO_LISTESI } from '../routes/paths.jsx'
 import { useNews } from '../context/NewsContext.jsx'
+import { API_BASE } from '../config/api'
 import '../App.css'
 
 function HomePage() {
@@ -32,7 +33,7 @@ function HomePage() {
     setSecilenCoin(coin)
 
     try {
-      const cevap = await fetch(`http://localhost:5199/api/Finans/${coin.sembol.toLowerCase()}`)
+      const cevap = await fetch(`${API_BASE}/fiyat/${coin.sembol.toLowerCase()}`)
       const sonuc = await cevap.json()
       // Analiz bitti — coin sayfasına yönlendir, veriyi state ile taşı
       navigate(`/${coin.sembol.toLowerCase()}`, { state: { analizVeri: sonuc } })

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { createChart, ColorType, AreaSeries, HistogramSeries } from 'lightweight-charts'
+import { API_BASE } from '../config/api'
 
 const PERIYOTLAR = [
     { label: '1G', value: '1d' },
@@ -27,7 +28,7 @@ function PriceChart({ sembol, coinRenk = '#007bff' }) {
         setHata(null)
         try {
             const res = await fetch(
-                `http://localhost:5199/api/Finans/grafik/${sembol.toLowerCase()}?periyot=${secilenPeriyot}`
+                `${API_BASE}/grafik/${sembol.toLowerCase()}?periyot=${secilenPeriyot}`
             )
             const data = await res.json()
             if (data.hata) {

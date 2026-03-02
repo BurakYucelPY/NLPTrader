@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { KRIPTO_LISTESI } from '../routes/paths.jsx'
+import { API_BASE } from '../config/api'
 
-const CHATBOT_API = 'http://localhost:8000/chatbot'
+const CHATBOT_API = `${API_BASE}/chatbot`
 
 function ChatBot() {
   // Durumlar: 'closed', 'coin-select', 'chat'

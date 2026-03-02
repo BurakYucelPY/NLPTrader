@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react'
+import { API_BASE } from '../config/api'
 
 const NewsContext = createContext()
 
@@ -17,7 +18,7 @@ export function NewsProvider({ children }) {
 
     console.log("SSE bağlantısı kuruluyor... (deneme:", retryCountRef.current + 1, ")")
 
-    const eventSource = new EventSource("http://localhost:5199/api/Haber/stream")
+    const eventSource = new EventSource(`${API_BASE}/piyasa-durumu-stream`)
 
     eventSource.onmessage = (event) => {
       if (event.data === "[DONE]") {
