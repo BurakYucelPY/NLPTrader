@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AssetCard from '../components/AssetCard'
 import NewsSection from '../components/NewsSection'
@@ -14,6 +14,29 @@ function HomePage() {
 
   // Overlay state (sadece yükleme ekranı)
   const [secilenCoin, setSecilenCoin] = useState(null)
+
+  // Başarı oranları state
+  const [basariOranlari, setBasariOranlari] = useState({})
+
+  // Sayfa yüklendiğinde başarı oranlarını backend'den çek
+  useEffect(() => {
+    const basariVerisiCek = async () => {
+      try {
+        const cevap = await fetch(`${API_BASE}/basari-ozet`)
+        const veri = await cevap.json()
+        if (Array.isArray(veri)) {
+          const oranMap = {}
+          veri.forEach(item => {
+            oranMap[item.sembol] = item
+          })
+          setBasariOranlari(oranMap)
+        }
+      } catch (hata) {
+        console.error('Başarı oranları çekilemedi:', hata)
+      }
+    }
+    basariVerisiCek()
+  }, [])
 
   // Parçacıklar (overlay arka planı için)
   const parcaciklar = useMemo(() => {
@@ -98,6 +121,7 @@ function HomePage() {
               ad={varlik.ad}
               ikon={varlik.ikon}
               renk={varlik.renk}
+              basariVerisi={basariOranlari[varlik.sembol] || null}
               onClick={coinTiklandi}
             />
           ))}
