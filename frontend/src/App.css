@@ -436,12 +436,11 @@ html {
   transition: all 0.2s ease;
   text-align: center;
   position: relative;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 140px;
+  min-height: 140px;
 }
 
 .asset-card:hover {
@@ -1705,4 +1704,84 @@ html {
   z-index: 5;
   color: #ff5252;
   font-size: 0.9rem;
+}
+
+/* ========== BAŞARI ORANI BADGE (AssetCard) ========== */
+.asset-success-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid;
+  margin-top: 6px;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+}
+
+.asset-card:hover .asset-success-badge {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.success-icon {
+  font-size: 0.65rem;
+}
+
+.success-rate {
+  font-weight: 800;
+}
+
+.success-waiting {
+  font-size: 0.68rem;
+  opacity: 0.7;
+}
+
+/* ========== BAŞARI MINI BADGE (CoinPage Sağ Üst) ========== */
+.success-mini-badge {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(18, 18, 36, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid;
+  border-radius: 12px;
+  z-index: 100;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.success-mini-icon {
+  font-size: 0.85rem;
+}
+
+.success-mini-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.success-mini-rate {
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.success-mini-label {
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.success-mini-rate-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  opacity: 0.6;
 }
