@@ -4,6 +4,7 @@ from fastapi.responses import StreamingResponse
 from services.finance import calculate_hybrid_strategy
 from services.nlp import get_sentiment_data, stream_news_data
 from services.chatbot import chat_with_groq, generate_ai_commentary
+from services.supabase_service import process_signal, get_success_rate, get_all_success_rates
 import yfinance as yf
 import json
 
@@ -45,7 +46,19 @@ def get_market_news_stream():
 @app.get("/fiyat/{sembol}")
 def get_analysis(sembol: str):
     # Tüm hesaplamayı finance.py yapıyor, biz sadece sonucu iletiyoruz
-    return calculate_hybrid_strategy(sembol)
+    sonuc = calculate_hybrid_strategy(sembol)
+    
+    # Sinyal kaydı: Fiyatı veritabanına yaz + önceki kayıtla kıyasla
+    if "hata" not in sonuc:
+        try:
+            sinyal_bilgi = process_signal(sembol, sonuc["fiyat"])
+            sonuc["sinyal_durumu"] = sinyal_bilgi
+        except Exception as e:
+            # Sinyal kaydı hatası ana akışı bloke etmemeli
+            print(f"Sinyal kayıt hatası ({sembol}): {e}")
+            sonuc["sinyal_durumu"] = None
+    
+    return sonuc
 
 @app.post("/chatbot")
 async def chatbot_endpoint(request: Request):
@@ -74,6 +87,22 @@ def get_ai_commentary(sembol: str):
             return {"hata": analiz_verisi["hata"]}
         yorum = generate_ai_commentary(analiz_verisi)
         return {"sembol": sembol.upper(), "yorum": yorum}
+    except Exception as e:
+        return {"hata": str(e)}
+
+@app.get("/basari-orani/{sembol}")
+def get_coin_success_rate(sembol: str):
+    """Tek bir coin'in başarı oranını ve istatistiklerini döndürür"""
+    try:
+        return get_success_rate(sembol)
+    except Exception as e:
+        return {"hata": str(e)}
+
+@app.get("/basari-ozet")
+def get_all_success():
+    """Tüm coinlerin başarı oranlarını topluca döndürür"""
+    try:
+        return get_all_success_rates()
     except Exception as e:
         return {"hata": str(e)}
 
