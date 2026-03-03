@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ROUTES } from '../routes/AppRoutes.jsx'
 import DecisionCard from './DecisionCard'
 import AnalysisMetrics from './AnalysisMetrics'
 import PriceChart from './PriceChart'
 import AiCommentary from './AiCommentary'
+import { API_BASE } from '../config/api'
 import '../App.css'
 
 function AnalysisTemplate({
@@ -17,6 +18,26 @@ function AnalysisTemplate({
 }) {
   const navigate = useNavigate()
 
+  // Başarı oranı state
+  const [basariVerisi, setBasariVerisi] = useState(null)
+
+  // Başarı oranını backend'den çek
+  useEffect(() => {
+    if (!coinSembolStr) return
+    const basariCek = async () => {
+      try {
+        const cevap = await fetch(`${API_BASE}/basari-orani/${coinSembolStr.toLowerCase()}`)
+        const veri = await cevap.json()
+        if (!veri.hata) {
+          setBasariVerisi(veri)
+        }
+      } catch (hata) {
+        console.error('Başarı oranı çekilemedi:', hata)
+      }
+    }
+    basariCek()
+  }, [coinSembolStr])
+
   const parcaciklar = useMemo(() => {
     return Array.from({ length: 18 }, (_, i) => ({
       id: i,
@@ -28,6 +49,14 @@ function AnalysisTemplate({
       isSembol: i < 5,
     }))
   }, [])
+
+  // Başarı oranına göre renk
+  const getBasariRenk = (oran) => {
+    if (oran === null || oran === undefined) return '#888'
+    if (oran >= 60) return '#00c853'
+    if (oran >= 40) return '#ffc107'
+    return '#ff5252'
+  }
 
   return (
     <>
@@ -98,6 +127,23 @@ function AnalysisTemplate({
         {/* Başlık */}
         <h1 className="title">{baslik}</h1>
 
+        {/* Sağ Üst — Minimal Başarı Badge */}
+        {basariVerisi && basariVerisi.basari_orani !== null && (
+          <div className="success-mini-badge" style={{ borderColor: getBasariRenk(basariVerisi.basari_orani) + '55' }}>
+            <span className="success-mini-icon">
+              {basariVerisi.basari_orani >= 60 ? '🟢' : basariVerisi.basari_orani >= 40 ? '🟡' : '🔴'}
+            </span>
+            <div className="success-mini-info">
+              <span className="success-mini-rate" style={{ color: getBasariRenk(basariVerisi.basari_orani) }}>
+                %{basariVerisi.basari_orani} <span className="success-mini-rate-label">Başarı Oranı</span>
+              </span>
+              <span className="success-mini-label">
+                {basariVerisi.basarili}✓ / {basariVerisi.basarisiz}✗ · {basariVerisi.toplam_sinyal} sinyal
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Sonuç Alanı */}
         {yukleniyor ? (
           <div className="button-container">
@@ -143,3 +189,4 @@ function AnalysisTemplate({
 }
 
 export default AnalysisTemplate
+
