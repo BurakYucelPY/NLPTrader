@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+yfinance
+numpy
+ta
+feedparser
+requests
+vaderSentiment
+python-dotenv
+groq
