@@ -1,0 +1,172 @@
+/* ═══════════════════════════════════════════════════════════════
+   Backend Wake-Up Overlay
+   Render free tier uyku modundan uyanırken gösterilen loading ekranı
+   ═══════════════════════════════════════════════════════════════ */
+
+.wakeup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 20, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+    opacity: 1;
+    visibility: visible;
+}
+
+.wakeup-overlay.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* ─── Spinner Ring ─── */
+.wakeup-spinner {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 3px solid rgba(177, 158, 239, 0.15);
+    border-top-color: #B19EEF;
+    animation: wakeup-spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+    margin-bottom: 28px;
+    box-shadow:
+        0 0 20px rgba(177, 158, 239, 0.2),
+        inset 0 0 20px rgba(177, 158, 239, 0.05);
+}
+
+@keyframes wakeup-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ─── Pulse Ring (arkadaki halka) ─── */
+.wakeup-pulse {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid rgba(177, 158, 239, 0.15);
+    animation: wakeup-pulse-anim 2s ease-out infinite;
+}
+
+@keyframes wakeup-pulse-anim {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+/* ─── Content ─── */
+.wakeup-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.wakeup-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #e8e6f0;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.wakeup-subtitle {
+    font-size: 0.82rem;
+    color: rgba(177, 158, 239, 0.6);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* ─── Dots Animation ─── */
+.wakeup-dots {
+    display: inline-flex;
+    gap: 4px;
+    margin-left: 4px;
+}
+
+.wakeup-dots span {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #B19EEF;
+    animation: wakeup-dot-bounce 1.4s ease-in-out infinite;
+}
+
+.wakeup-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.wakeup-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes wakeup-dot-bounce {
+
+    0%,
+    80%,
+    100% {
+        opacity: 0.25;
+        transform: scale(0.8);
+    }
+
+    40% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* ─── Progress Bar ─── */
+.wakeup-progress {
+    width: 200px;
+    height: 3px;
+    background: rgba(177, 158, 239, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 18px;
+}
+
+.wakeup-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #B19EEF, #8b7acc);
+    border-radius: 4px;
+    animation: wakeup-progress-anim 2.5s ease-in-out infinite;
+}
+
+@keyframes wakeup-progress-anim {
+    0% {
+        width: 0%;
+        margin-left: 0;
+    }
+
+    50% {
+        width: 60%;
+        margin-left: 20%;
+    }
+
+    100% {
+        width: 0%;
+        margin-left: 100%;
+    }
+}
+
+/* ─── Retry Counter ─── */
+.wakeup-retry {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.2);
+    margin-top: 24px;
+    font-variant-numeric: tabular-nums;
+}

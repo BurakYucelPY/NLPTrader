@@ -19,6 +19,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
 @app.get("/piyasa-durumu")
 def get_market_news():
     # Sadece haberleri ve sentiment sonuçlarını döndürür
