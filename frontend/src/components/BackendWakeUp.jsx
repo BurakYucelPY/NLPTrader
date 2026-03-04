@@ -58,6 +58,11 @@ function BackendWakeUp() {
     return (
         <div className={`wakeup-overlay ${fadeOut ? 'fade-out' : ''}`}>
             <div className="wakeup-content">
+                {/* NLPTrader Başlık */}
+                <h1 className="home-title" style={{ marginBottom: '32px' }}>
+                    <span className="home-title-accent">NLP</span>Trader
+                </h1>
+
                 {/* Arkadaki pulse halkası */}
                 <div className="wakeup-pulse" />
 
@@ -71,19 +76,14 @@ function BackendWakeUp() {
                         <span /><span /><span />
                     </span>
                 </p>
-                <p className="wakeup-subtitle">İlk bağlantı biraz zaman alabilir</p>
+                <p className="wakeup-subtitle">Ücretsiz sunucu kullanıldığı için uyanması biraz zaman alabilir</p>
 
                 {/* İlerleme çubuğu */}
                 <div className="wakeup-progress">
                     <div className="wakeup-progress-bar" />
                 </div>
 
-                {/* Deneme sayısı */}
-                {denemeSayisi > 2 && (
-                    <span className="wakeup-retry">
-                        {denemeSayisi}. deneme
-                    </span>
-                )}
+
             </div>
         </div>
     )
