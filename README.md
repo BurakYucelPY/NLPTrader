@@ -21,7 +21,15 @@
   </a>
 </p>
 
+<p align="center">
+  <a href="https://nlp-trader.vercel.app/">
+    <img src="https://img.shields.io/badge/🔴%20CANLI%20DEMO-nlp--trader.vercel.app-ff6b6b?style=for-the-badge" alt="Canlı Demo" />
+  </a>
+</p>
+
 > Kripto para piyasalarını **teknik analiz, NLP haber duygu analizi ve yapay zeka** ile birleştirerek yorumlayan, her analize sinyal kaydı tutup geçmiş başarısını ölçen akıllı trading platformu.
+>
+> 🌐 **Canlı Demo**: [https://nlp-trader.vercel.app](https://nlp-trader.vercel.app/)
 
 ---
 
