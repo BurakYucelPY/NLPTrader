@@ -111,7 +111,7 @@ Bir coin'i analiz ettiğinizde sistem sırayla şunları yapar:
 | **OBV** | %15 | 5 günlük eğim × 20 → `tanh()` | `ta` kütüphanesi |
 | **Volatilite** | %15 | Mean Reversion: `−tanh(z_score)` | Rolling SMA-20 |
 
-> **Neden Tanh?** Sigmoid benzeri bu fonksiyon, uç değerlerde sertleşme sağlar. RSI 99 ile RSI 80 arasındaki fark, RSI 55 ile RSI 50 arasındaki farktan daha az etkilidir — tıpkı gerçek piyasalardaki gibi.
+> **Neden Tanh?** Sigmoid benzeri bu fonksiyon, uç değerlerde sertleşme sağlar. RSI 99 ile RSI 80 arasındaki fark, RSI 55 ile RSI 50 arasındaki farktan daha az etkilidir. Bu yaklaşım, piyasalardaki azalan marjinal etki prensibini yansıtır.
 
 ### 7 Kademeli Karar Çıktısı
 
@@ -181,7 +181,7 @@ VADER'ın standart İngilizce sözlüğü kripto dünyasını bilmez. Bu yüzden
 
 ## 🗃️ Supabase Sinyal Takip Sistemi — Kıyaslamalı Başarı
 
-Sistemin doğruluğunu ölçmenin en iyi yolu: **Geçmiş sinyallerin başarısını takip etmek.**
+Sistem, ürettiği sinyallerin performansını geçmiş verilerle karşılaştırarak ölçer.
 
 ### Veritabanı Tabloları
 
@@ -245,9 +245,9 @@ Chatbot'a gönderilen analiz bağlamı şunları içerir:
 
 ---
 
-## 📝 AI Piyasa Yorumu — Bloomberg Tarzı Analiz
+## 📝 AI Piyasa Yorumu — Profesyonel Analiz Raporu
 
-Coin detay sayfasında LLaMA 3.3 70B, sanki Bloomberg'de 15 yıl çalışmış kıdemli bir kripto analisti gibi profesyonel piyasa raporu yazar.
+Coin detay sayfasında LLaMA 3.3 70B, yapılandırılmış ve profesyonel bir piyasa raporu üretir.
 
 ### Yorum Yapısı (5 Bölüm)
 
